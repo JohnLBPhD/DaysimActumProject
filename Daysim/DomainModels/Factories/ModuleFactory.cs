@@ -6,22 +6,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.Factories;
 using Ninject.Modules;
 
-namespace Daysim.DomainModels.Factories {
-	public class ModuleFactory {
-		private readonly Type _type;
+namespace DaySim.DomainModels.Factories {
+  public class ModuleFactory {
+    private readonly Type _type;
 
-		public ModuleFactory(Configuration configuration) {
-			var helper = new FactoryHelper(configuration);
+    public ModuleFactory(Configuration configuration) {
+      FactoryHelper helper = new FactoryHelper(configuration);
 
-			_type = helper.Module.GetModuleType();
-		}
+      _type = helper.Module.GetModuleType();
+    }
 
-		public NinjectModule Create() {
-			return (NinjectModule) Activator.CreateInstance(_type);
-		}
-	}
+    public NinjectModule Create() {
+      return (NinjectModule)Activator.CreateInstance(_type);
+    }
+  }
 }

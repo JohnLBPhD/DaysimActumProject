@@ -7,146 +7,145 @@
 
 using System;
 using System.Collections.Generic;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
-using Daysim.Framework.ShadowPricing;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
+using DaySim.Framework.ShadowPricing;
 
-namespace Daysim.DomainModels.Default.Wrappers {
-	[Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Default)]
-	public class ParkAndRideNodeWrapper : IParkAndRideNodeWrapper {
-		private readonly IParkAndRideNode _parkAndRideNode;
+namespace DaySim.DomainModels.Default.Wrappers {
+  [Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Default)]
+  public class ParkAndRideNodeWrapper : IParkAndRideNodeWrapper {
+    private readonly IParkAndRideNode _parkAndRideNode;
 
-		[UsedImplicitly]
-		public ParkAndRideNodeWrapper(IParkAndRideNode parkAndRideNode) {
-			_parkAndRideNode = parkAndRideNode;
-		}
+    [UsedImplicitly]
+    public ParkAndRideNodeWrapper(IParkAndRideNode parkAndRideNode) {
+      _parkAndRideNode = parkAndRideNode;
+    }
 
-		#region domain model properies
+    #region domain model properies
 
-		public int Id {
-			get { return _parkAndRideNode.Id; }
-			set { _parkAndRideNode.Id = value; }
-		}
+    public int Id {
+      get => _parkAndRideNode.Id;
+      set => _parkAndRideNode.Id = value;
+    }
 
-		public int ZoneId {
-			get { return _parkAndRideNode.ZoneId; }
-			set { _parkAndRideNode.ZoneId = value; }
-		}
+    public int ZoneId {
+      get => _parkAndRideNode.ZoneId;
+      set => _parkAndRideNode.ZoneId = value;
+    }
 
-		public int XCoordinate {
-			get { return _parkAndRideNode.XCoordinate; }
-			set { _parkAndRideNode.XCoordinate = value; }
-		}
+    public int XCoordinate {
+      get => _parkAndRideNode.XCoordinate;
+      set => _parkAndRideNode.XCoordinate = value;
+    }
 
-		public int YCoordinate {
-			get { return _parkAndRideNode.YCoordinate; }
-			set { _parkAndRideNode.YCoordinate = value; }
-		}
+    public int YCoordinate {
+      get => _parkAndRideNode.YCoordinate;
+      set => _parkAndRideNode.YCoordinate = value;
+    }
 
-		public int Capacity {
-			get { return _parkAndRideNode.Capacity; }
-			set { _parkAndRideNode.Capacity = value; }
-		}
+    public int Capacity {
+      get => _parkAndRideNode.Capacity;
+      set => _parkAndRideNode.Capacity = value;
+    }
 
-		public int Cost {
-			get { return _parkAndRideNode.Cost; }
-			set { _parkAndRideNode.Cost = value; }
-		}
+    public int Cost {
+      get => _parkAndRideNode.Cost;
+      set => _parkAndRideNode.Cost = value;
+    }
 
-		public int NearestParcelId {
-			get { return _parkAndRideNode.NearestParcelId; }
-			set { _parkAndRideNode.NearestParcelId = value; }
-		}
+    public int NearestParcelId {
+      get => _parkAndRideNode.NearestParcelId;
+      set => _parkAndRideNode.NearestParcelId = value;
+    }
 
-		public int NearestStopAreaId {
-			get { return _parkAndRideNode.NearestStopAreaId; }
-			set { _parkAndRideNode.NearestStopAreaId = value; }
-		}
+    public int NearestStopAreaId {
+      get => _parkAndRideNode.NearestStopAreaId;
+      set => _parkAndRideNode.NearestStopAreaId = value;
+    }
 
-		public int ParkingTypeId {
-			get { return _parkAndRideNode.ParkingTypeId; }
-			set { _parkAndRideNode.ParkingTypeId = value; }
-		}
+    public int ParkingTypeId {
+      get => _parkAndRideNode.ParkingTypeId;
+      set => _parkAndRideNode.ParkingTypeId = value;
+    }
 
-		public double CostPerHour08_18 {
-			get { return _parkAndRideNode.CostPerHour08_18; }
-			set { _parkAndRideNode.CostPerHour08_18 = value; }
-		}
+    public double CostPerHour08_18 {
+      get => _parkAndRideNode.CostPerHour08_18;
+      set => _parkAndRideNode.CostPerHour08_18 = value;
+    }
 
-		public double CostPerHour18_23 {
-			get { return _parkAndRideNode.CostPerHour18_23; }
-			set { _parkAndRideNode.CostPerHour18_23 = value; }
-		}
+    public double CostPerHour18_23 {
+      get => _parkAndRideNode.CostPerHour18_23;
+      set => _parkAndRideNode.CostPerHour18_23 = value;
+    }
 
-		public double CostPerHour23_08 {
-			get { return _parkAndRideNode.CostPerHour23_08; }
-			set { _parkAndRideNode.CostPerHour23_08 = value; }
-		}
+    public double CostPerHour23_08 {
+      get => _parkAndRideNode.CostPerHour23_08;
+      set => _parkAndRideNode.CostPerHour23_08 = value;
+    }
 
-		public double CostAnnual {
-			get { return _parkAndRideNode.CostAnnual; }
-			set { _parkAndRideNode.CostAnnual = value; }
-		}
+    public double CostAnnual {
+      get => _parkAndRideNode.CostAnnual;
+      set => _parkAndRideNode.CostAnnual = value;
+    }
 
-		public int PRFacility {
-			get { return _parkAndRideNode.PRFacility; }
-			set { _parkAndRideNode.PRFacility = value; }
-		}
+    public int PRFacility {
+      get => _parkAndRideNode.PRFacility;
+      set => _parkAndRideNode.PRFacility = value;
+    }
 
-		public int LengthToStopArea {
-			get { return _parkAndRideNode.LengthToStopArea; }
-			set { _parkAndRideNode.LengthToStopArea = value; }
-		}
+    public int LengthToStopArea {
+      get => _parkAndRideNode.LengthToStopArea;
+      set => _parkAndRideNode.LengthToStopArea = value;
+    }
 
-		public int Auto {
-			get { return _parkAndRideNode.Auto; }
-			set { _parkAndRideNode.Auto = value; }
-		}
+    public int Auto {
+      get => _parkAndRideNode.Auto;
+      set => _parkAndRideNode.Auto = value;
+    }
 
-		#endregion
+    #endregion
 
-		#region flags/choice model/etc. properties
+    #region flags/choice model/etc. properties
 
-		public double[] ShadowPriceDifference { get; set; }
+    public double[] ShadowPriceDifference { get; set; }
 
-		public double[] ShadowPrice { get; set; }
+    public double[] ShadowPrice { get; set; }
 
-		public double[] ExogenousLoad { get; set; }
+    public double[] ExogenousLoad { get; set; }
 
-		public double[] ParkAndRideLoad { get; set; }
+    public double[] ParkAndRideLoad { get; set; }
 
-		#endregion
+    #endregion
 
-		#region wrapper methods
+    #region wrapper methods
 
-		public virtual void SetParkAndRideShadowPricing(Dictionary<int, IParkAndRideShadowPriceNode> parkAndRideShadowPrices) {
-			if (parkAndRideShadowPrices == null) {
-				throw new ArgumentNullException("parkAndRideShadowPrices");
-			}
+    public virtual void SetParkAndRideShadowPricing(Dictionary<int, IParkAndRideShadowPriceNode> parkAndRideShadowPrices) {
+      if (parkAndRideShadowPrices == null) {
+        throw new ArgumentNullException("parkAndRideShadowPrices");
+      }
 
-			if (!Global.ParkAndRideNodeIsEnabled || !Global.Configuration.ShouldUseParkAndRideShadowPricing || Global.Configuration.IsInEstimationMode) {
-				return;
-			}
+      if (!Global.ParkAndRideNodeIsEnabled || !Global.Configuration.ShouldUseParkAndRideShadowPricing || Global.Configuration.IsInEstimationMode) {
+        return;
+      }
 
-			IParkAndRideShadowPriceNode parkAndRideShadowPriceNode;
 
-			ShadowPriceDifference = new double[Global.Settings.Times.MinutesInADay];
-			ShadowPrice = new double[Global.Settings.Times.MinutesInADay];
-			ExogenousLoad = new double[Global.Settings.Times.MinutesInADay];
-			ParkAndRideLoad = new double[Global.Settings.Times.MinutesInADay];
+      ShadowPriceDifference = new double[Global.Settings.Times.MinutesInADay];
+      ShadowPrice = new double[Global.Settings.Times.MinutesInADay];
+      ExogenousLoad = new double[Global.Settings.Times.MinutesInADay];
+      ParkAndRideLoad = new double[Global.Settings.Times.MinutesInADay];
 
-			if (!parkAndRideShadowPrices.TryGetValue(Id, out parkAndRideShadowPriceNode)) {
-				return;
-			}
+      if (!parkAndRideShadowPrices.TryGetValue(Id, out IParkAndRideShadowPriceNode parkAndRideShadowPriceNode)) {
+        return;
+      }
 
-			ShadowPriceDifference = parkAndRideShadowPrices[Id].ShadowPriceDifference;
-			ShadowPrice = parkAndRideShadowPrices[Id].ShadowPrice;
-			ExogenousLoad = parkAndRideShadowPrices[Id].ExogenousLoad;
-			// ParkAndRideLoad = parkAndRideShadowPrices[Id].ParkAndRideLoad; {JLB 20121001 commented out this line so that initial values of load are zero for any run}
-		}
+      ShadowPriceDifference = parkAndRideShadowPrices[Id].ShadowPriceDifference;
+      ShadowPrice = parkAndRideShadowPrices[Id].ShadowPrice;
+      ExogenousLoad = parkAndRideShadowPrices[Id].ExogenousLoad;
+      // ParkAndRideLoad = parkAndRideShadowPrices[Id].ParkAndRideLoad; {JLB 20121001 commented out this line so that initial values of load are zero for any run}
+    }
 
-		#endregion
-	}
+    #endregion
+  }
 }

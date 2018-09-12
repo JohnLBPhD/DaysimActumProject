@@ -5,13 +5,13 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.DomainModels.Actum.Models.Interfaces {
-	public interface IActumTransitStopArea : ITransitStopArea {
+namespace DaySim.DomainModels.Actum.Models.Interfaces {
+  public interface IActumTransitStopArea : ITransitStopArea {
 
-		//string TerminalName  { get; set; }
-		int Microzone { get; set; }
-		int BikeOnBoardTerminal { get; set; }
-	}
+    //string TerminalName  { get; set; }
+    int Microzone { get; set; }
+    int BikeOnBoardTerminal { get; set; }
+  }
 }

@@ -15,259 +15,255 @@ using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace Daysim.Framework.Core {
-	public class ConfigurationManager {
-		public const string DEFAULT_CONFIGURATION_NAME = "Configuration.xml";
+namespace DaySim.Framework.Core {
+  public class ConfigurationManager {
+    public const string DEFAULT_CONFIGURATION_NAME = "Configuration.xml";
 
-		private readonly FileInfo _file;
-		private readonly string _extension;
+    private readonly FileInfo _file;
+    private readonly string _extension;
 
-		public ConfigurationManager(string path) {
-			if (string.IsNullOrEmpty(path)) {
-				var location = Assembly.GetExecutingAssembly().Location;
-				var directoryName = Path.GetDirectoryName(location);
+    public ConfigurationManager(string path) {
+      if (string.IsNullOrEmpty(path)) {
+        string location = Assembly.GetExecutingAssembly().Location;
+        string directoryName = Path.GetDirectoryName(location);
 
-				path =
-					directoryName == null
-						? DEFAULT_CONFIGURATION_NAME
-						: Path.Combine(directoryName, DEFAULT_CONFIGURATION_NAME);
-			}
+        path =
+            directoryName == null
+                ? DEFAULT_CONFIGURATION_NAME
+                : Path.Combine(directoryName, DEFAULT_CONFIGURATION_NAME);
+      }
 
-			_file = new FileInfo(path);
+      _file = new FileInfo(path);
 
-			_extension =
-				Path
-					.GetExtension(_file.Name)
-					.ToLower();
-		}
+      _extension =
+          Path
+              .GetExtension(_file.Name)
+              .ToLower();
+    }
 
-		public Configuration Open() {
-			using (var stream = _file.Open(FileMode.Open, FileAccess.Read, FileShare.Read)) {
-				if (_extension == ".xml") {
-					var serializer = new XmlSerializer(typeof (Configuration));
+    public Configuration Open() {
+      using (FileStream stream = _file.Open(FileMode.Open, FileAccess.Read, FileShare.Read)) {
+        if (_extension == ".xml") {
+          XmlSerializer serializer = new XmlSerializer(typeof(Configuration));
 
-					return (Configuration) serializer.Deserialize(stream);
-				}
+          return (Configuration)serializer.Deserialize(stream);
+        }
 
-				if (_extension == ".properties") {
-					return Deserialize(stream);
-				}
-			}
+        if (_extension == ".properties") {
+          return Deserialize(stream);
+        }
+      }
 
-			return null;
-		}
+      return null;
+    }
 
-		public void Write(Configuration configuration, PrintFile printFile) {
-			var properties = typeof (Configuration).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+    public void Write(Configuration configuration, PrintFile printFile) {
+      PropertyInfo[] properties = typeof(Configuration).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-			if (_extension == ".xml") {
-				WriteFromXml(printFile, properties);
-			}
+      if (_extension == ".xml") {
+        WriteFromXml(printFile, properties);
+      }
 
-			if (_extension == ".properties") {
-				WriteFromProperties(printFile, properties);
-			}
+      if (_extension == ".properties") {
+        WriteFromProperties(printFile, properties);
+      }
 
-			var list =
-				properties
-					.Select(property => {
-						var value = property.GetValue(configuration, null);
+      var list =
+          properties
+              .Select(property => {
+                object value = property.GetValue(configuration, null);
 
-						var metadata =
-							property
-								.GetCustomAttributes(typeof (MetadataAttribute), true)
-								.Cast<MetadataAttribute>()
-								.SingleOrDefault();
+                MetadataAttribute metadata =
+                      property
+                          .GetCustomAttributes(typeof(MetadataAttribute), true)
+                          .Cast<MetadataAttribute>()
+                          .SingleOrDefault();
 
-						var description =
-							metadata == null || string.IsNullOrEmpty(metadata.Value)
-								? property.Name.ToSentenceCase()
-								: metadata.Value;
+                string description =
+                      metadata == null || string.IsNullOrEmpty(metadata.Value)
+                          ? property.Name.ToSentenceCase()
+                          : metadata.Value;
 
-						string format;
+                string format;
 
-						if (value == null) {
-							format = string.Empty;
-						}
-						else {
-							if (value is char) {
-								var b = (byte) (char) value;
+                if (value == null) {
+                  format = string.Empty;
+                } else {
+                  if (value is char) {
+                    byte b = (byte)(char)value;
 
-								format = string.Format("{0} - {1}", b, AsciiTable.GetDescription(b));
-							}
-							else {
-								format = value.ToString().Trim();
-							}
-						}
+                    format = string.Format("{0} - {1}", b, AsciiTable.GetDescription(b));
+                  } else {
+                    format = value.ToString().Trim();
+                  }
+                }
 
-						return new {
-							property.Name,
-							Value = format,
-							Description = description
-						};
-					})
-					.ToList();
+                return new {
+                  property.Name,
+                  Value = format,
+                  Description = description
+                };
+              })
+              .ToList();
 
-			var maxKeyLength =
-				list
-					.Select(x => x.Name.Length)
-					.Max();
+      int maxKeyLength =
+                list
+                    .Select(x => x.Name.Length)
+                    .Max();
 
-			var maxValueLength =
-				list
-					.Select(x => x.Value.Length)
-					.Max();
+      int maxValueLength =
+                list
+                    .Select(x => x.Value.Length)
+                    .Max();
 
-			foreach (var property in list) {
-				printFile
-					.WriteLine("{0}> {1} // {2}.",
-						property.Name.PadLeft(maxKeyLength),
-						property.Value.PadRight(maxValueLength),
-						property.Description);
-			}
+      foreach (var property in list) {
+        printFile
+            .WriteLine("{0}> {1} // {2}.",
+                property.Name.PadLeft(maxKeyLength),
+                property.Value.PadRight(maxValueLength),
+                property.Description);
+      }
 
-			printFile.WriteLine();
-		}
+      printFile.WriteLine();
+    }
 
-		private void WriteFromXml(PrintFile printFile, PropertyInfo[] properties) {
-			using (var stream = _file.Open(FileMode.Open, FileAccess.Read, FileShare.Read)) {
-				var document = XDocument.Load(stream);
+    private void WriteFromXml(PrintFile printFile, PropertyInfo[] properties) {
+      using (FileStream stream = _file.Open(FileMode.Open, FileAccess.Read, FileShare.Read)) {
+        XDocument document = XDocument.Load(stream);
 
-				var attributes =
-					document.Root == null
-						? new List<string>()
-						: document
-							.Root
-							.Attributes()
-							.Select(x => x.Name.LocalName)
-							.ToList();
+        List<string> attributes =
+                    document.Root == null
+                        ? new List<string>()
+                        : document
+                            .Root
+                            .Attributes()
+                            .Select(x => x.Name.LocalName)
+                            .ToList();
 
-				WriteUnusedProperties(printFile, properties, attributes);
-				WriteInvalidAttributes(printFile, properties, attributes);
-			}
-		}
+        WriteUnusedProperties(printFile, properties, attributes);
+        WriteInvalidAttributes(printFile, properties, attributes);
+      }
+    }
 
-		private void WriteFromProperties(PrintFile printFile, PropertyInfo[] properties) {}
+    private void WriteFromProperties(PrintFile printFile, PropertyInfo[] properties) { }
 
-		private static void WriteUnusedProperties(PrintFile printFile, IEnumerable<PropertyInfo> properties, IEnumerable<string> attributes) {
-			var list =
-				properties
-					.Where(property => attributes.All(x => x != property.Name))
-					.Select(property => property.Name)
-					.ToList();
+    private static void WriteUnusedProperties(PrintFile printFile, IEnumerable<PropertyInfo> properties, IEnumerable<string> attributes) {
+      List<string> list =
+                properties
+                    .Where(property => attributes.All(x => x != property.Name))
+                    .Select(property => property.Name)
+                    .ToList();
 
-			if (list.Count == 0) {
-				return;
-			}
+      if (list.Count == 0) {
+        return;
+      }
 
-			printFile.WriteLine("The following properties in the configuration file where not set:");
-			printFile.IncrementIndent();
+      printFile.WriteLine("The following properties in the configuration file where not set:");
+      printFile.IncrementIndent();
 
-			foreach (var item in list) {
-				printFile.WriteLine("* {0}", item);
-			}
+      foreach (string item in list) {
+        printFile.WriteLine("* {0}", item);
+      }
 
-			printFile.DecrementIndent();
-			printFile.WriteLine();
-		}
+      printFile.DecrementIndent();
+      printFile.WriteLine();
+    }
 
-		private static void WriteInvalidAttributes(PrintFile printFile, IEnumerable<PropertyInfo> properties, IEnumerable<string> attributes) {
-			var list =
-				attributes
-					.Where(attribute => attribute != "xsd" && attribute != "xsi" && properties.All(x => x.Name != attribute))
-					.ToList();
+    private static void WriteInvalidAttributes(PrintFile printFile, IEnumerable<PropertyInfo> properties, IEnumerable<string> attributes) {
+      List<string> list =
+                attributes
+                    .Where(attribute => attribute != "xsd" && attribute != "xsi" && properties.All(x => x.Name != attribute))
+                    .ToList();
 
-			if (list.Count == 0) {
-				return;
-			}
+      if (list.Count == 0) {
+        return;
+      }
 
-			printFile.WriteLine("The following attributes in the configuration file are invalid:");
-			printFile.IncrementIndent();
+      printFile.WriteLine("The following attributes in the configuration file are invalid:");
+      printFile.IncrementIndent();
 
-			foreach (var item in list) {
-				printFile.WriteLine("* {0}", item);
-			}
+      foreach (string item in list) {
+        printFile.WriteLine("* {0}", item);
+      }
 
-			printFile.DecrementIndent();
-			printFile.WriteLine();
-		}
+      printFile.DecrementIndent();
+      printFile.WriteLine();
+    }
 
-		private static Configuration Deserialize(Stream stream) {
-			var configuration = new Configuration();
-			var type1 = configuration.GetType();
-			var keys = new List<string>();
-			var number = 0;
+    private static Configuration Deserialize(Stream stream) {
+      Configuration configuration = new Configuration();
+      Type type1 = configuration.GetType();
+      List<string> keys = new List<string>();
+      int number = 0;
 
-			using (var reader = new StreamReader(stream)) {
-				string line;
+      using (StreamReader reader = new StreamReader(stream)) {
+        string line;
 
-				while ((line = reader.ReadLine()) != null) {
-					line = line.Trim();
-					number++;
+        while ((line = reader.ReadLine()) != null) {
+          line = line.Trim();
+          number++;
 
-					if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) {
-						continue;
-					}
+          if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) {
+            continue;
+          }
 
-					var key = line.Split('=')[0].Trim();
-					var value = string.Join("=", line.Split('=').Skip(1).ToArray()).Trim();
+          string key = line.Split('=')[0].Trim();
+          string value = string.Join("=", line.Split('=').Skip(1).ToArray()).Trim();
 
-					if (!CodeGenerator.IsValidLanguageIndependentIdentifier(key)) {
-						var builder = new StringBuilder();
+          if (!CodeGenerator.IsValidLanguageIndependentIdentifier(key)) {
+            StringBuilder builder = new StringBuilder();
 
-						builder
-							.AppendFormat("Error reading configuration file on line {0}.", number).AppendLine()
-							.AppendFormat("The indentifer \"{0}\" is invalid.", key).AppendLine()
-							.AppendLine("Please correct or remove the invalid identifer.");
+            builder
+                .AppendFormat("Error reading configuration file on line {0}.", number).AppendLine()
+                .AppendFormat("The indentifer \"{0}\" is invalid.", key).AppendLine()
+                .AppendLine("Please correct or remove the invalid identifer.");
 
-						throw new Exception(builder.ToString());
-					}
+            throw new Exception(builder.ToString());
+          }
 
-					if (keys.Contains(key)) {
-						var builder = new StringBuilder();
+          if (keys.Contains(key)) {
+            StringBuilder builder = new StringBuilder();
 
-						builder
-							.AppendFormat("Error reading configuration file on line {0}.", number).AppendLine()
-							.AppendFormat("The file contains a duplicate entry for \"{0}\".", key).AppendLine()
-							.AppendLine("Please ensure that there are no duplicate entries inside of the configuration file.");
+            builder
+                .AppendFormat("Error reading configuration file on line {0}.", number).AppendLine()
+                .AppendFormat("The file contains a duplicate entry for \"{0}\".", key).AppendLine()
+                .AppendLine("Please ensure that there are no duplicate entries inside of the configuration file.");
 
-						throw new Exception(builder.ToString());
-					}
+            throw new Exception(builder.ToString());
+          }
 
-					keys.Add(key);
+          keys.Add(key);
 
-					var property = type1.GetProperty(key, BindingFlags.Public | BindingFlags.Instance);
+          PropertyInfo property = type1.GetProperty(key, BindingFlags.Public | BindingFlags.Instance);
 
-					if (property == null) {
-						continue;
-					}
+          if (property == null) {
+            continue;
+          }
 
-					var type2 = property.PropertyType;
+          Type type2 = property.PropertyType;
 
-					try {
-						if (type2 == typeof (char)) {
-							var b = Convert.ChangeType(value, typeof (byte));
+          try {
+            if (type2 == typeof(char)) {
+              object b = Convert.ChangeType(value, typeof(byte));
 
-							property.SetValue(configuration, Convert.ChangeType(b, type2), null);
-						}
-						else {
-							property.SetValue(configuration, Convert.ChangeType(value, type2), null);
-						}
-					}
-					catch {
-						var builder = new StringBuilder();
+              property.SetValue(configuration, Convert.ChangeType(b, type2), null);
+            } else {
+              property.SetValue(configuration, Convert.ChangeType(value, type2), null);
+            }
+          } catch {
+            StringBuilder builder = new StringBuilder();
 
-						builder
-							.AppendFormat("Error reading configuration file on line {0}.", number).AppendLine()
-							.AppendFormat("Cannot convert the value of \"{0}\" to the type of {1}.", value, type2.Name).AppendLine()
-							.AppendLine("Please ensure that the value is in the correct format for the given type.");
+            builder
+                .AppendFormat("Error reading configuration file on line {0}.", number).AppendLine()
+                .AppendFormat("Cannot convert the value of \"{0}\" to the type of {1}.", value, type2.Name).AppendLine()
+                .AppendLine("Please ensure that the value is in the correct format for the given type.");
 
-						throw new Exception(builder.ToString());
-					}
-				}
-			}
+            throw new Exception(builder.ToString());
+          }
+        }
+      }
 
-			return configuration;
-		}
-	}
+      return configuration;
+    }
+  }
 }

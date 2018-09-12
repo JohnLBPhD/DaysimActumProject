@@ -6,21 +6,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.Factories;
 
-namespace Daysim.Settings {
-	public class SettingsFactory {
-		private readonly Type _type;
+namespace DaySim.Settings {
+  public class SettingsFactory {
+    private readonly Type _type;
 
-		public SettingsFactory(Configuration configuration) {
-			var helper = new FactoryHelper(configuration);
+    public SettingsFactory(Configuration configuration) {
+      FactoryHelper helper = new FactoryHelper(configuration);
 
-			_type = helper.Settings.GetSettingsType();
-		}
+      _type = helper.Settings.GetSettingsType();
+    }
 
-		public ISettings Create() {
-			return (ISettings) Activator.CreateInstance(_type);
-		}
-	}
+    public ISettings Create() {
+      return (ISettings)Activator.CreateInstance(_type);
+    }
+  }
 }

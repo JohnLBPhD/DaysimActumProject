@@ -6,22 +6,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Factories {
-	public class SubzoneFactory {
-		private readonly Type _type;
+namespace DaySim.DomainModels.Factories {
+  public class SubzoneFactory {
+    private readonly Type _type;
 
-		public SubzoneFactory(Configuration configuration) {
-			var helper = new FactoryHelper(configuration);
+    public SubzoneFactory(Configuration configuration) {
+      FactoryHelper helper = new FactoryHelper(configuration);
 
-			_type = helper.Subzone.GetSubzoneType();
-		}
+      _type = helper.Subzone.GetSubzoneType();
+    }
 
-		public ISubzone Create(int sequence) {
-			return (ISubzone) Activator.CreateInstance(_type, sequence);
-		}
-	}
+    public ISubzone Create(int sequence) {
+      return (ISubzone)Activator.CreateInstance(_type, sequence);
+    }
+  }
 }

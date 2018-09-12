@@ -1,18 +1,17 @@
 ﻿using System;
 
-namespace Daysim.Framework.Core {
-	public interface IMinuteSpan : IEquatable<IMinuteSpan>
-	{
-		int Index { get; }
+namespace DaySim.Framework.Core {
+  public interface IMinuteSpan : IEquatable<IMinuteSpan> {
+    int Index { get; }
 
-		int Start { get; set; }
+    int Start { get; set; }
 
-		int End { get; set; }
+    int End { get; set; }
 
-		bool Keep { get; set; }
+    bool Keep { get; set; }
 
-		int Middle { get; }
+    int Middle { get; }
 
-		int Duration { get; }
-	}
+    int Duration { get; }
+  }
 }

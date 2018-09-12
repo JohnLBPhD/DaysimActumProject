@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class PersonDayModelException : Exception {
-		public PersonDayModelException() : this("Error running person-day models.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class PersonDayModelException : Exception {
+    public PersonDayModelException() : this("Error running person-day models.") { }
 
-		public PersonDayModelException(string message) : base(message) {}
+    public PersonDayModelException(string message) : base(message) { }
 
-		public PersonDayModelException(string message, Exception innerException) : base(message, innerException) {}
+    public PersonDayModelException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected PersonDayModelException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected PersonDayModelException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

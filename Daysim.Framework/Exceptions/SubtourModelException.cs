@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class SubtourModelException : Exception {
-		public SubtourModelException() : this("Error running subtour models.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class SubtourModelException : Exception {
+    public SubtourModelException() : this("Error running subtour models.") { }
 
-		public SubtourModelException(string message) : base(message) {}
+    public SubtourModelException(string message) : base(message) { }
 
-		public SubtourModelException(string message, Exception innerException) : base(message, innerException) {}
+    public SubtourModelException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected SubtourModelException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected SubtourModelException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using Daysim.Framework.Core;
+﻿using System.Collections.Generic;
+using DaySim.Framework.Core;
 
-namespace Daysim.AggregateLogsums
-{
-    class AggregateLogsumsCalculatorFactory
-    {
-        private readonly string _key = Global.AggregateLogsumCalculator;
+namespace DaySim.AggregateLogsums {
+  internal class AggregateLogsumsCalculatorFactory {
+    private readonly string _key = Global.AggregateLogsumCalculator;
 
-        private readonly Dictionary<String, IAggregateLogsumsCalculatorCreator> _creators = new Dictionary<string, IAggregateLogsumsCalculatorCreator>();
+    private readonly Dictionary<string, IAggregateLogsumsCalculatorCreator> _creators = new Dictionary<string, IAggregateLogsumsCalculatorCreator>();
 
-        public IAggregateLogsumsCalculatorCreator AggregateLogsumCalculatorCreator { get; private set; }
+    public IAggregateLogsumsCalculatorCreator AggregateLogsumCalculatorCreator { get; private set; }
 
-        public void Register(String key, IAggregateLogsumsCalculatorCreator value)
-        {
-            _creators.Add(key, value);
-        }
-
-        public void Initialize()
-        {
-            AggregateLogsumCalculatorCreator = _creators[_key];
-        }
+    public void Register(string key, IAggregateLogsumsCalculatorCreator value) {
+      _creators.Add(key, value);
     }
+
+    public void Initialize() {
+      AggregateLogsumCalculatorCreator = _creators[_key];
+    }
+  }
 }

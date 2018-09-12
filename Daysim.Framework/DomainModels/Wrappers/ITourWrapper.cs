@@ -6,238 +6,238 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System.Collections.Generic;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.Framework.DomainModels.Wrappers {
-	public interface ITourWrapper : ITour {
-		#region relations properties
+namespace DaySim.Framework.DomainModels.Wrappers {
+  public interface ITourWrapper : ITour {
+    #region relations properties
 
-		IHouseholdWrapper Household { get; set; }
+    IHouseholdWrapper Household { get; set; }
 
-		IPersonWrapper Person { get; set; }
+    IPersonWrapper Person { get; set; }
 
-		IPersonDayWrapper PersonDay { get; set; }
+    IPersonDayWrapper PersonDay { get; set; }
 
-		ITourWrapper ParentTour { get; set; }
+    ITourWrapper ParentTour { get; set; }
 
-		List<ITourWrapper> Subtours { get; set; }
+    List<ITourWrapper> Subtours { get; set; }
 
-		IHalfTour HalfTourFromOrigin { get; set; }
+    IHalfTour HalfTourFromOrigin { get; set; }
 
-		IHalfTour HalfTourFromDestination { get; set; }
+    IHalfTour HalfTourFromDestination { get; set; }
 
-		IParcelWrapper OriginParcel { get; set; }
+    IParcelWrapper OriginParcel { get; set; }
 
-		IParcelWrapper DestinationParcel { get; set; }
+    IParcelWrapper DestinationParcel { get; set; }
 
-		#endregion
+    #endregion
 
-		#region flags/choice model/etc. properties
+    #region flags/choice model/etc. properties
 
-		bool IsHomeBasedTour { get; set; }
+    bool IsHomeBasedTour { get; set; }
 
-		ITimeWindow TimeWindow { get; set; }
+    ITimeWindow TimeWindow { get; set; }
 
-		double IndicatedTravelTimeToDestination { get; set; }
+    double IndicatedTravelTimeToDestination { get; set; }
 
-		double IndicatedTravelTimeFromDestination { get; set; }
+    double IndicatedTravelTimeFromDestination { get; set; }
 
-		int EarliestOriginDepartureTime { get; set; }
+    int EarliestOriginDepartureTime { get; set; }
 
-		int LatestOriginArrivalTime { get; set; }
+    int LatestOriginArrivalTime { get; set; }
 
-		IMinuteSpan DestinationDepartureBigPeriod { get; set; }
+    IMinuteSpan DestinationDepartureBigPeriod { get; set; }
 
-		IMinuteSpan DestinationArrivalBigPeriod { get; set; }
+    IMinuteSpan DestinationArrivalBigPeriod { get; set; }
 
-		double TimeCoefficient { get; set; }
+    double TimeCoefficient { get; set; }
 
-		double CostCoefficient { get; set; }
+    double CostCoefficient { get; set; }
 
-		int ParkAndRideNodeId { get; set; }
+    int ParkAndRideNodeId { get; set; }
 
-		int ParkAndRideOriginStopAreaKey { get; set; }
+    int ParkAndRideOriginStopAreaKey { get; set; }
 
-		int ParkAndRideDestinationStopAreaKey { get; set; }
+    int ParkAndRideDestinationStopAreaKey { get; set; }
 
-        int ParkAndRidePathType { get; set; }
+    int ParkAndRidePathType { get; set; }
 
-        double ParkAndRideTransitTime { get; set; }
+    double ParkAndRideTransitTime { get; set; }
 
-        double ParkAndRideTransitDistance { get; set; }
+    double ParkAndRideTransitDistance { get; set; }
 
-        double ParkAndRideTransitCost { get; set; }
+    double ParkAndRideTransitCost { get; set; }
 
-        double ParkAndRideTransitGeneralizedTime { get; set; }
-        
- 		bool DestinationModeAndTimeHaveBeenSimulated { get; set; }
+    double ParkAndRideTransitGeneralizedTime { get; set; }
 
-		bool HalfTour1HasBeenSimulated { get; set; }
+    bool DestinationModeAndTimeHaveBeenSimulated { get; set; }
 
-		bool HalfTour2HasBeenSimulated { get; set; }
+    bool HalfTour1HasBeenSimulated { get; set; }
 
-		bool IsMissingData { get; set; }
+    bool HalfTour2HasBeenSimulated { get; set; }
 
-		//JLB 20160323
-		int HalfTour1AccessMode { get; set; }
+    bool IsMissingData { get; set; }
 
-		int HalfTour1AccessPathType { get; set; }
+    //JLB 20160323
+    int HalfTour1AccessMode { get; set; }
 
-		double HalfTour1AccessTime { get; set; }
+    int HalfTour1AccessPathType { get; set; }
 
-		double HalfTour1AccessCost { get; set; }
+    double HalfTour1AccessTime { get; set; }
 
-		double HalfTour1AccessDistance { get; set; }
+    double HalfTour1AccessCost { get; set; }
 
-		int HalfTour1AccessStopAreaKey { get; set; }
+    double HalfTour1AccessDistance { get; set; }
 
-		int HalfTour1EgressMode { get; set; }
+    int HalfTour1AccessStopAreaKey { get; set; }
 
-		int HalfTour1EgressPathType { get; set; }
+    int HalfTour1EgressMode { get; set; }
 
-		double HalfTour1EgressTime { get; set; }
+    int HalfTour1EgressPathType { get; set; }
 
-		double HalfTour1EgressCost { get; set; }
+    double HalfTour1EgressTime { get; set; }
 
-		double HalfTour1EgressDistance { get; set; }
+    double HalfTour1EgressCost { get; set; }
 
-		int HalfTour1EgressStopAreaKey { get; set; }
-	
-		int HalfTour2AccessMode { get; set; }
+    double HalfTour1EgressDistance { get; set; }
 
-		int HalfTour2AccessPathType { get; set; }
+    int HalfTour1EgressStopAreaKey { get; set; }
 
-		double HalfTour2AccessTime { get; set; }
+    int HalfTour2AccessMode { get; set; }
 
-		double HalfTour2AccessCost { get; set; }
+    int HalfTour2AccessPathType { get; set; }
 
-		double HalfTour2AccessDistance { get; set; }
+    double HalfTour2AccessTime { get; set; }
 
-		int HalfTour2AccessStopAreaKey { get; set; }
+    double HalfTour2AccessCost { get; set; }
 
-		int HalfTour2EgressMode { get; set; }
+    double HalfTour2AccessDistance { get; set; }
 
-		int HalfTour2EgressPathType { get; set; }
+    int HalfTour2AccessStopAreaKey { get; set; }
 
-		double HalfTour2EgressTime { get; set; }
+    int HalfTour2EgressMode { get; set; }
 
-		double HalfTour2EgressCost { get; set; }
+    int HalfTour2EgressPathType { get; set; }
 
-		double HalfTour2EgressDistance { get; set; }
+    double HalfTour2EgressTime { get; set; }
 
-		int HalfTour2EgressStopAreaKey { get; set; }
+    double HalfTour2EgressCost { get; set; }
 
-		double HalfTour1TravelTime { get; set; }
+    double HalfTour2EgressDistance { get; set; }
 
-		double HalfTour2TravelTime { get; set; }
+    int HalfTour2EgressStopAreaKey { get; set; }
 
-		double TravelCostForPTBikeTour { get; set; }
+    double HalfTour1TravelTime { get; set; }
 
-		double TravelDistanceForPTBikeTour { get; set; }
+    double HalfTour2TravelTime { get; set; }
 
+    double TravelCostForPTBikeTour { get; set; }
 
+    double TravelDistanceForPTBikeTour { get; set; }
 
 
-		#endregion
 
-		#region wrapper methods
 
-		bool IsWorkPurpose();
+    #endregion
 
-		bool IsSchoolPurpose();
+    #region wrapper methods
 
-		bool IsEscortPurpose();
+    bool IsWorkPurpose();
 
-		bool IsPersonalBusinessPurpose();
+    bool IsSchoolPurpose();
 
-		bool IsShoppingPurpose();
+    bool IsEscortPurpose();
 
-		bool IsMealPurpose();
+    bool IsPersonalBusinessPurpose();
 
-		bool IsSocialPurpose();
+    bool IsShoppingPurpose();
 
-		bool IsRecreationPurpose();
+    bool IsMealPurpose();
 
-		bool IsMedicalPurpose();
+    bool IsSocialPurpose();
 
-		bool IsPersonalBusinessOrMedicalPurpose();
+    bool IsRecreationPurpose();
 
-		bool IsSocialOrRecreationPurpose();
+    bool IsMedicalPurpose();
 
-		bool IsWalkMode();
+    bool IsPersonalBusinessOrMedicalPurpose();
 
-		bool IsBikeMode();
+    bool IsSocialOrRecreationPurpose();
 
-		bool IsSovMode();
+    bool IsWalkMode();
 
-		bool IsHov2Mode();
+    bool IsBikeMode();
 
-		bool IsHov3Mode();
+    bool IsSovMode();
 
-		bool IsTransitMode();
+    bool IsHov2Mode();
 
-		bool IsParkAndRideMode();
+    bool IsHov3Mode();
 
-		bool IsSchoolBusMode();
+    bool IsTransitMode();
 
-		bool IsWalkOrBikeMode();
+    bool IsParkAndRideMode();
 
-		bool SubtoursExist();
+    bool IsSchoolBusMode();
 
-		bool IsAnHovMode();
+    bool IsWalkOrBikeMode();
 
-		bool IsAnAutoMode();
+    bool SubtoursExist();
 
-		bool UsesTransitModes();
+    bool IsAnHovMode();
 
-		int GetTotalToursByPurpose();
+    bool IsAnAutoMode();
 
-		int GetTotalSimulatedToursByPurpose();
+    bool UsesTransitModes();
 
-		int GetTourPurposeSegment();
+    int GetTotalToursByPurpose();
 
-		int GetTourCategory();
+    int GetTotalSimulatedToursByPurpose();
 
-		void SetHomeBasedIsSimulated();
+    int GetTourPurposeSegment();
 
-		void SetWorkBasedIsSimulated();
+    int GetTourCategory();
 
-		void SetHalfTours(int direction);
+    void SetHomeBasedIsSimulated();
 
-		ITimeWindow GetRelevantTimeWindow(IHouseholdDayWrapper householdDay);
+    void SetWorkBasedIsSimulated();
 
-		void SetOriginTimes(int direction = 0);
+    void SetHalfTours(int direction);
 
-		void UpdateTourValues();
+    ITimeWindow GetRelevantTimeWindow(IHouseholdDayWrapper householdDay);
 
-		IHalfTour GetHalfTour(int direction);
+    void SetOriginTimes(int direction = 0);
 
-		ITourModeImpedance[] GetTourModeImpedances();
+    void UpdateTourValues();
 
-		void SetParentTourSequence(int parentTourSequence);
+    IHalfTour GetHalfTour(int direction);
 
-		ITourWrapper CreateSubtour(int originAddressType, int originParcelId, int originZoneKey, int destinationPurpose);
+    ITourModeImpedance[] GetTourModeImpedances();
 
-		void SetParkAndRideStay();
+    void SetParentTourSequence(int parentTourSequence);
 
-		int GetVotALSegment();
+    ITourWrapper CreateSubtour(int originAddressType, int originParcelId, int originZoneKey, int destinationPurpose);
 
-		//JLB 20160323
-		bool IsBusinessPurpose();
+    void SetParkAndRideStay();
 
-		bool IsHovDriverMode();
+    int GetVotALSegment();
 
-		bool IsHovPassengerMode();
+    //JLB 20160323
+    bool IsBusinessPurpose();
 
-		bool IsPaidRideShareMode();
+    bool IsHovDriverMode();
 
-		#endregion
+    bool IsHovPassengerMode();
 
-		#region init/utility/export methods
+    bool IsPaidRideShareMode();
 
-		void Export();
+    #endregion
 
-		#endregion
-	}
+    #region init/utility/export methods
+
+    void Export();
+
+    #endregion
+  }
 }

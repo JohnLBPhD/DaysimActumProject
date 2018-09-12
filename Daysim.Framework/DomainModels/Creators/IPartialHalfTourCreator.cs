@@ -5,13 +5,13 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim.Framework.DomainModels.Creators {
-	public interface IPartialHalfTourCreator : ICreator {
-		IPartialHalfTour CreateModel();
+namespace DaySim.Framework.DomainModels.Creators {
+  public interface IPartialHalfTourCreator : ICreator {
+    IPartialHalfTour CreateModel();
 
-		IPartialHalfTourWrapper CreateWrapper(IPartialHalfTour partialHalfTour, IHouseholdDayWrapper householdDayWrapper);
-	}
+    IPartialHalfTourWrapper CreateWrapper(IPartialHalfTour partialHalfTour, IHouseholdDayWrapper householdDayWrapper);
+  }
 }

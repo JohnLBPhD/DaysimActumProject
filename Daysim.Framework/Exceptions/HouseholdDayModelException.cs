@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class HouseholdDayModelException : Exception {
-		public HouseholdDayModelException() : this("Error running household-day models.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class HouseholdDayModelException : Exception {
+    public HouseholdDayModelException() : this("Error running household-day models.") { }
 
-		public HouseholdDayModelException(string message) : base(message) {}
+    public HouseholdDayModelException(string message) : base(message) { }
 
-		public HouseholdDayModelException(string message, Exception innerException) : base(message, innerException) {}
+    public HouseholdDayModelException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected HouseholdDayModelException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected HouseholdDayModelException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

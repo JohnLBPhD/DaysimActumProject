@@ -6,28 +6,28 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System.Collections.Generic;
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim.Framework.DomainModels.Models {
-	public interface IHalfTour {
-		List<ITripWrapper> Trips { get; }
+namespace DaySim.Framework.DomainModels.Models {
+  public interface IHalfTour {
+    List<ITripWrapper> Trips { get; }
 
-		int SimulatedTrips { get; set; }
+    int SimulatedTrips { get; set; }
 
-		int OneSimulatedTripFlag { get; }
+    int OneSimulatedTripFlag { get; }
 
-		int TwoSimulatedTripsFlag { get; }
+    int TwoSimulatedTripsFlag { get; }
 
-		int ThreeSimulatedTripsFlag { get; }
+    int ThreeSimulatedTripsFlag { get; }
 
-		int FourSimulatedTripsFlag { get; }
+    int FourSimulatedTripsFlag { get; }
 
-		int FiveSimulatedTripsFlag { get; }
+    int FiveSimulatedTripsFlag { get; }
 
-		int FivePlusSimulatedTripsFlag { get; }
+    int FivePlusSimulatedTripsFlag { get; }
 
-		void SetTrips(int direction);
+    void SetTrips(int direction);
 
-		ITripWrapper CreateNextTrip(ITripWrapper trip, int intermediateStopPurpose, int destinationPurpose);
-	}
+    ITripWrapper CreateNextTrip(ITripWrapper trip, int intermediateStopPurpose, int destinationPurpose);
+  }
 }

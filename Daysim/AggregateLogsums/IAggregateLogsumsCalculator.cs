@@ -1,9 +1,7 @@
-﻿using Daysim.Framework.Core;
+﻿using DaySim.Framework.Core;
 
-namespace Daysim.AggregateLogsums
-{
-    public interface IAggregateLogsumsCalculator
-    {
-        void Calculate(IRandomUtility utility);
-    }
+namespace DaySim.AggregateLogsums {
+  public interface IAggregateLogsumsCalculator {
+    void Calculate(IRandomUtility utility);
+  }
 }

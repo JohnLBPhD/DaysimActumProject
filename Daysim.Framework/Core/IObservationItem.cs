@@ -6,12 +6,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-namespace Daysim.Framework.Core {
-	public interface IObservationItem {
-		int PositionIndex { get; }
+namespace DaySim.Framework.Core {
+  public interface IObservationItem {
+    int PositionIndex { get; }
 
-		int Key { get; }
+    int Key { get; }
 
-		double Data { get; }
-	}
+    double Data { get; }
+  }
 }

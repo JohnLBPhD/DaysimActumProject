@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class ChosenParcelNotSetInEstimationModeException : Exception {
-		public ChosenParcelNotSetInEstimationModeException() : this("The model is in estimation mode and the chosen parcel is null.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class ChosenParcelNotSetInEstimationModeException : Exception {
+    public ChosenParcelNotSetInEstimationModeException() : this("The model is in estimation mode and the chosen parcel is null.") { }
 
-		public ChosenParcelNotSetInEstimationModeException(string message) : base(message) {}
+    public ChosenParcelNotSetInEstimationModeException(string message) : base(message) { }
 
-		public ChosenParcelNotSetInEstimationModeException(string message, Exception innerException) : base(message, innerException) {}
+    public ChosenParcelNotSetInEstimationModeException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected ChosenParcelNotSetInEstimationModeException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected ChosenParcelNotSetInEstimationModeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

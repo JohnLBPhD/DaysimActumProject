@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class InvalidTourDirectionException : Exception {
-		public InvalidTourDirectionException() : this("The tour direction is invalid. Valid options are ORIGIN_TO_DESTINATION and DESTINATION_TO_ORIGIN.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class InvalidTourDirectionException : Exception {
+    public InvalidTourDirectionException() : this("The tour direction is invalid. Valid options are ORIGIN_TO_DESTINATION and DESTINATION_TO_ORIGIN.") { }
 
-		public InvalidTourDirectionException(string message) : base(message) {}
+    public InvalidTourDirectionException(string message) : base(message) { }
 
-		public InvalidTourDirectionException(string message, Exception innerException) : base(message, innerException) {}
+    public InvalidTourDirectionException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected InvalidTourDirectionException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected InvalidTourDirectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

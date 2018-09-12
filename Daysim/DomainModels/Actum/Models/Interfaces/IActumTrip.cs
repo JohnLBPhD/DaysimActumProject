@@ -5,37 +5,37 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.DomainModels.Actum.Models.Interfaces {
-	public interface IActumTrip : ITrip {
-		int EscortedDestinationPurpose { get; set; }
+namespace DaySim.DomainModels.Actum.Models.Interfaces {
+  public interface IActumTrip : ITrip {
+    int EscortedDestinationPurpose { get; set; }
 
-		int BikePTCombination { get; set; }
+    int BikePTCombination { get; set; }
 
-		int AccessMode { get; set; }
+    int AccessMode { get; set; }
 
-		int AccessPathType { get; set; }
+    int AccessPathType { get; set; }
 
-		double AccessTime { get; set; }
+    double AccessTime { get; set; }
 
-		double AccessCost { get; set; }
+    double AccessCost { get; set; }
 
-		double AccessDistance { get; set; }
+    double AccessDistance { get; set; }
 
-		int AccessStopArea { get; set; }
+    int AccessStopArea { get; set; }
 
-		int EgressMode { get; set; }
+    int EgressMode { get; set; }
 
-		int EgressPathType { get; set; }
+    int EgressPathType { get; set; }
 
-		double EgressTime { get; set; }
+    double EgressTime { get; set; }
 
-		double EgressCost { get; set; }
+    double EgressCost { get; set; }
 
-		double EgressDistance { get; set; }
+    double EgressDistance { get; set; }
 
-		int EgressStopArea { get; set; }
-	
-	}
+    int EgressStopArea { get; set; }
+
+  }
 }

@@ -6,33 +6,33 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Creators;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Creators;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Creators {
-	[UsedImplicitly]
-	[Factory(Factory.WrapperFactory, Category = Category.Creator)]
-	public class JointTourCreator<TWrapper, TModel> : IJointTourCreator where TWrapper : IJointTourWrapper where TModel : IJointTour, new() {
-		IJointTour IJointTourCreator.CreateModel() {
-			return CreateModel();
-		}
+namespace DaySim.DomainModels.Creators {
+  [UsedImplicitly]
+  [Factory(Factory.WrapperFactory, Category = Category.Creator)]
+  public class JointTourCreator<TWrapper, TModel> : IJointTourCreator where TWrapper : IJointTourWrapper where TModel : IJointTour, new() {
+    IJointTour IJointTourCreator.CreateModel() {
+      return CreateModel();
+    }
 
-		private static TModel CreateModel() {
-			return new TModel();
-		}
+    private static TModel CreateModel() {
+      return new TModel();
+    }
 
-		IJointTourWrapper IJointTourCreator.CreateWrapper(IJointTour jointTour, IHouseholdDayWrapper householdDayWrapper) {
-			return CreateWrapper(jointTour, householdDayWrapper);
-		}
+    IJointTourWrapper IJointTourCreator.CreateWrapper(IJointTour jointTour, IHouseholdDayWrapper householdDayWrapper) {
+      return CreateWrapper(jointTour, householdDayWrapper);
+    }
 
-		private static TWrapper CreateWrapper(IJointTour jointTour, IHouseholdDayWrapper householdDayWrapper) {
-			var type = typeof (TWrapper);
-			var instance = Activator.CreateInstance(type, jointTour, householdDayWrapper);
+    private static TWrapper CreateWrapper(IJointTour jointTour, IHouseholdDayWrapper householdDayWrapper) {
+      Type type = typeof(TWrapper);
+      object instance = Activator.CreateInstance(type, jointTour, householdDayWrapper);
 
-			return (TWrapper) instance;
-		}
-	}
+      return (TWrapper)instance;
+    }
+  }
 }

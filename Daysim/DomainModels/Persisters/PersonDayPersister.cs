@@ -5,24 +5,24 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.ChoiceModels;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.Factories;
+using DaySim.ChoiceModels;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Persisters {
-	[UsedImplicitly]
-	[Factory(Factory.PersistenceFactory, Category = Category.Persister)]
-	public class PersonDayPersister<TModel> : Persister<TModel> where TModel : class, IPersonDay, new() {
-		public override void Export(IModel model) {
-			base.Export(model);
+namespace DaySim.DomainModels.Persisters {
+  [UsedImplicitly]
+  [Factory(Factory.PersistenceFactory, Category = Category.Persister)]
+  public class PersonDayPersister<TModel> : Persister<TModel> where TModel : class, IPersonDay, new() {
+    public override void Export(IModel model) {
+      base.Export(model);
 
-			ChoiceModelFactory.PersonDayFileRecordsWritten++;
+      ChoiceModelFactory.PersonDayFileRecordsWritten++;
 
-			var m = (TModel) model;
+      TModel m = (TModel)model;
 
-			ChoiceModelFactory.PersonDayHomeBasedToursCheckSum += m.HomeBasedTours;
-			ChoiceModelFactory.PersonDayWorkBasedToursCheckSum += m.WorkBasedTours;
-		}
-	}
+      ChoiceModelFactory.PersonDayHomeBasedToursCheckSum += m.HomeBasedTours;
+      ChoiceModelFactory.PersonDayWorkBasedToursCheckSum += m.WorkBasedTours;
+    }
+  }
 }

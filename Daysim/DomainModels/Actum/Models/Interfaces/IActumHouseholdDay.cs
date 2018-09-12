@@ -5,22 +5,22 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.DomainModels.Actum.Models.Interfaces {
-	public interface IActumHouseholdDay : IHouseholdDay {
-		int SharedActivityHomeStays { get; set; }
+namespace DaySim.DomainModels.Actum.Models.Interfaces {
+  public interface IActumHouseholdDay : IHouseholdDay {
+    int SharedActivityHomeStays { get; set; }
 
-		int NumberInLargestSharedHomeStay { get; set; }
+    int NumberInLargestSharedHomeStay { get; set; }
 
-		int StartingMinuteSharedHomeStay { get; set; }
+    int StartingMinuteSharedHomeStay { get; set; }
 
-		int DurationMinutesSharedHomeStay { get; set; }
+    int DurationMinutesSharedHomeStay { get; set; }
 
-		int AdultsInSharedHomeStay { get; set; }
+    int AdultsInSharedHomeStay { get; set; }
 
-		int ChildrenInSharedHomeStay { get; set; }
+    int ChildrenInSharedHomeStay { get; set; }
 
-		int PrimaryPriorityTimeFlag { get; set; }
-	}
+    int PrimaryPriorityTimeFlag { get; set; }
+  }
 }

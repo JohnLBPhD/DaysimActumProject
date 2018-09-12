@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class InvalidDepartureTimeException : Exception {
-		public InvalidDepartureTimeException() : this("An attempt to simulate an invalid departure time was made.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class InvalidDepartureTimeException : Exception {
+    public InvalidDepartureTimeException() : this("An attempt to simulate an invalid departure time was made.") { }
 
-		public InvalidDepartureTimeException(string message) : base(message) {}
+    public InvalidDepartureTimeException(string message) : base(message) { }
 
-		public InvalidDepartureTimeException(string message, Exception innerException) : base(message, innerException) {}
+    public InvalidDepartureTimeException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected InvalidDepartureTimeException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected InvalidDepartureTimeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

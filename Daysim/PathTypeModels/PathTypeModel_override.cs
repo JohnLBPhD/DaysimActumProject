@@ -6,17 +6,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Daysim.ChoiceModels;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Exceptions;
-using Daysim.Framework.Roster;
 
-namespace Daysim.PathTypeModels {
-	public class PathTypeModel_override : PathTypeModel_Actum {
-	}
+namespace DaySim.PathTypeModels {
+  public class PathTypeModel_override : PathTypeModel_Actum {
+  }
 
 }

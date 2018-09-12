@@ -5,29 +5,29 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.ChoiceModels;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.Factories;
+using DaySim.ChoiceModels;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Persisters {
-	[UsedImplicitly]
-	[Factory(Factory.PersistenceFactory, Category = Category.Persister)]
-	public class TripPersister<TModel> : Persister<TModel> where TModel : class, ITrip, new() {
-		public override void Export(IModel model) {
-			base.Export(model);
+namespace DaySim.DomainModels.Persisters {
+  [UsedImplicitly]
+  [Factory(Factory.PersistenceFactory, Category = Category.Persister)]
+  public class TripPersister<TModel> : Persister<TModel> where TModel : class, ITrip, new() {
+    public override void Export(IModel model) {
+      base.Export(model);
 
-			ChoiceModelFactory.TripFileRecordsWritten++;
+      ChoiceModelFactory.TripFileRecordsWritten++;
 
-			var m = (TModel) model;
+      TModel m = (TModel)model;
 
-			ChoiceModelFactory.TripHalfTourCheckSum += m.Direction;
-			ChoiceModelFactory.TripDestinationPurposeCheckSum += m.DestinationPurpose;
-			ChoiceModelFactory.TripDestinationParcelCheckSum += m.DestinationParcelId;
-			ChoiceModelFactory.TripModeCheckSum += m.Mode;
-			ChoiceModelFactory.TripPathTypeCheckSum += m.PathType;
-			ChoiceModelFactory.TripDepartureTimeCheckSum += m.DepartureTime;
-			ChoiceModelFactory.TripArrivalTimeCheckSum += m.ArrivalTime;
-		}
-	}
+      ChoiceModelFactory.TripHalfTourCheckSum += m.Direction;
+      ChoiceModelFactory.TripDestinationPurposeCheckSum += m.DestinationPurpose;
+      ChoiceModelFactory.TripDestinationParcelCheckSum += m.DestinationParcelId;
+      ChoiceModelFactory.TripModeCheckSum += m.Mode;
+      ChoiceModelFactory.TripPathTypeCheckSum += m.PathType;
+      ChoiceModelFactory.TripDepartureTimeCheckSum += m.DepartureTime;
+      ChoiceModelFactory.TripArrivalTimeCheckSum += m.ArrivalTime;
+    }
+  }
 }

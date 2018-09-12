@@ -7,78 +7,78 @@
 
 
 using System.IO;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.Factories;
 using Ninject;
 
-namespace Daysim.AggregateLogsums {
-	public static class AggregateLogsumsExporter {
-		public static void Export(string path) {
-			BeginRunExport(path);
-		}
+namespace DaySim.AggregateLogsums {
+  public static class AggregateLogsumsExporter {
+    public static void Export(string path) {
+      BeginRunExport(path);
+    }
 
-		private static void BeginRunExport(string path) {
-			Global.PrintFile.WriteLine("Output files:");
-			Global.PrintFile.IncrementIndent();
+    private static void BeginRunExport(string path) {
+      Global.PrintFile.WriteLine("Output files:");
+      Global.PrintFile.IncrementIndent();
 
-			RunExport(path);
+      RunExport(path);
 
-			Global.PrintFile.DecrementIndent();
-		}
+      Global.PrintFile.DecrementIndent();
+    }
 
-		private static void RunExport(string path) {
-			var directory = Path.GetDirectoryName(path);
-			var filename = Path.GetFileNameWithoutExtension(path);
-			var extension = Path.GetExtension(path);
-			var zoneCount = Global.AggregateLogsums.GetLength(0);
-			
-			var zoneReader =
-				Global
-					.Kernel
-					.Get<IPersistenceFactory<IZone>>()
-					.Reader;
+    private static void RunExport(string path) {
+      string directory = Path.GetDirectoryName(path);
+      string filename = Path.GetFileNameWithoutExtension(path);
+      string extension = Path.GetExtension(path);
+      int zoneCount = Global.AggregateLogsums.GetLength(0);
 
-			for (var purpose = Global.Settings.Purposes.HomeBasedComposite; purpose <= Global.Settings.Purposes.Social; purpose++) {
-				if (directory == null) {
-					throw new DirectoryNotFoundException();
-				}
+      Framework.DomainModels.Persisters.IPersisterReader<IZone> zoneReader =
+                Global
+                    .Kernel
+                    .Get<IPersistenceFactory<IZone>>()
+                    .Reader;
 
-				var file = new FileInfo(Path.Combine(directory, string.Format("{0}.{1}{2}", filename, purpose, extension)));
+      for (int purpose = Global.Settings.Purposes.HomeBasedComposite; purpose <= Global.Settings.Purposes.Social; purpose++) {
+        if (directory == null) {
+          throw new DirectoryNotFoundException();
+        }
 
-				using (var writer = new StreamWriter(file.Open(FileMode.Create, FileAccess.Write, FileShare.Read))) {
-					writer.WriteLine("ZONE\tCHILD/SHO\tCHILD/LON\tCHILD/NAV\tNOCAR/SHO\tNOCAR/LON\tNOCAR/NAV\tCCOMP/SHO\tCCOMP/LON\tCCOMP/NAV\tCFULL/SHO\tCFULL/LON\tCFULL/NAV");
+        FileInfo file = new FileInfo(Path.Combine(directory, string.Format("{0}.{1}{2}", filename, purpose, extension)));
 
-					for (var id = 0; id < zoneCount; id++) {
-						var zone = zoneReader.Seek(id);
+        using (StreamWriter writer = new StreamWriter(file.Open(FileMode.Create, FileAccess.Write, FileShare.Read))) {
+          writer.WriteLine("ZONE\tCHILD/SHO\tCHILD/LON\tCHILD/NAV\tNOCAR/SHO\tNOCAR/LON\tNOCAR/NAV\tCCOMP/SHO\tCCOMP/LON\tCCOMP/NAV\tCFULL/SHO\tCFULL/LON\tCFULL/NAV");
 
-						writer.Write(string.Format("{0,4:0}", zone.Key));
-						writer.Write("\t");
+          for (int id = 0; id < zoneCount; id++) {
+            IZone zone = zoneReader.Seek(id);
 
-						var carOwnerships = Global.AggregateLogsums[id][purpose];
+            writer.Write(string.Format("{0,4:0}", zone.Key));
+            writer.Write("\t");
 
-						for (var carOwnership = Global.Settings.CarOwnerships.Child; carOwnership < Global.Settings.CarOwnerships.TotalCarOwnerships; carOwnership++) {
-							var votALSegments = carOwnerships[carOwnership];
+            double[][][] carOwnerships = Global.AggregateLogsums[id][purpose];
 
-							for (var votALSegment = Global.Settings.VotALSegments.Low; votALSegment < Global.Settings.VotALSegments.TotalVotALSegments; votALSegment++) {
-								var transitAccesses = votALSegments[votALSegment];
+            for (int carOwnership = Global.Settings.CarOwnerships.Child; carOwnership < Global.Settings.CarOwnerships.TotalCarOwnerships; carOwnership++) {
+              double[][] votALSegments = carOwnerships[carOwnership];
 
-								for (var transitAccess = Global.Settings.TransitAccesses.Gt0AndLteQtrMi; transitAccess < Global.Settings.TransitAccesses.TotalTransitAccesses; transitAccess++) {
-									writer.Write(string.Format("{0,9:f5}", transitAccesses[transitAccess]));
+              for (int votALSegment = Global.Settings.VotALSegments.Low; votALSegment < Global.Settings.VotALSegments.TotalVotALSegments; votALSegment++) {
+                double[] transitAccesses = votALSegments[votALSegment];
 
-									if ((carOwnership + 1) * (transitAccess + 1) != Global.Settings.CarOwnerships.TotalCarOwnerships * Global.Settings.TransitAccesses.TotalTransitAccesses) {
-										writer.Write("\t");
-									}
-								}
-							}
-						}
+                for (int transitAccess = Global.Settings.TransitAccesses.Gt0AndLteQtrMi; transitAccess < Global.Settings.TransitAccesses.TotalTransitAccesses; transitAccess++) {
+                  writer.Write(string.Format("{0,9:f5}", transitAccesses[transitAccess]));
 
-						writer.WriteLine();
-					}
-				}
+                  if ((carOwnership + 1) * (transitAccess + 1) != Global.Settings.CarOwnerships.TotalCarOwnerships * Global.Settings.TransitAccesses.TotalTransitAccesses) {
+                    writer.Write("\t");
+                  }
+                }
+              }
+            }
 
-				Global.PrintFile.WriteFileInfo(file, true);
-			}
-		}
-	}
+            writer.WriteLine();
+          }
+        }
+
+        Global.PrintFile.WriteFileInfo(file, true);
+      }
+    }
+  }
 }

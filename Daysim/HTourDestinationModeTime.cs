@@ -6,20 +6,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim {
-	public sealed class HTourDestinationModeTime {
+namespace DaySim {
+  public sealed class HTourDestinationModeTime {
 
-		
-		public HTourDestinationModeTime(IParcelWrapper destination, HTourModeTime modeTimes) {
-			Destination = destination;
-			ModeTimes = modeTimes;
-		}
 
-		public IParcelWrapper Destination  { get; set; }
+    public HTourDestinationModeTime(IParcelWrapper destination, HTourModeTime modeTimes) {
+      Destination = destination;
+      ModeTimes = modeTimes;
+    }
 
-		public HTourModeTime ModeTimes   { get; set; }
+    public IParcelWrapper Destination { get; set; }
 
-	}
+    public HTourModeTime ModeTimes { get; set; }
+
+  }
 }

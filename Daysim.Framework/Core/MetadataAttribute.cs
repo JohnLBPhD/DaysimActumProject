@@ -8,13 +8,13 @@
 
 using System;
 
-namespace Daysim.Framework.Core {
-	[AttributeUsage(AttributeTargets.Property)]
-	public sealed class MetadataAttribute : Attribute {
-		public MetadataAttribute(string value) {
-			Value = value;
-		}
+namespace DaySim.Framework.Core {
+  [AttributeUsage(AttributeTargets.Property)]
+  public sealed class MetadataAttribute : Attribute {
+    public MetadataAttribute(string value) {
+      Value = value;
+    }
 
-		public string Value { get; private set; }
-	}
+    public string Value { get; private set; }
+  }
 }

@@ -9,42 +9,42 @@
 using System;
 using System.Diagnostics;
 
-namespace Daysim.Framework.Core {
-	public sealed class Timer {
-		private readonly Stopwatch _stopwatch;
+namespace DaySim.Framework.Core {
+  public sealed class Timer {
+    private readonly Stopwatch _stopwatch;
 
-		public Timer(string message = null) {
-			if (message != null) {
-				Console.WriteLine(message);
-			}
+    public Timer(string message = null) {
+      if (message != null) {
+        Console.WriteLine(message);
+      }
 
-			if (Global.PrintFile != null) {
-				if (message != null) {
-					Global.PrintFile.WriteLine(message);
-				}
+      if (Global.PrintFile != null) {
+        if (message != null) {
+          Global.PrintFile.WriteLine(message);
+        }
 
-				Global.PrintFile.IncrementIndent();
-			}
+        Global.PrintFile.IncrementIndent();
+      }
 
-			_stopwatch = new Stopwatch();
-			_stopwatch.Start();
-		}
+      _stopwatch = new Stopwatch();
+      _stopwatch.Start();
+    }
 
-		public void Stop(string message = null) {
-			_stopwatch.Stop();
+    public void Stop(string message = null) {
+      _stopwatch.Stop();
 
-			if (message == null) {
-				message = "Time elapsed";
-			}
+      if (message == null) {
+        message = "Time elapsed";
+      }
 
-			Console.WriteLine("{0}: {1}", message, _stopwatch.Elapsed);
+      Console.WriteLine("{0}: {1}", message, _stopwatch.Elapsed);
 
-			if (Global.PrintFile == null) {
-				return;
-			}
+      if (Global.PrintFile == null) {
+        return;
+      }
 
-			Global.PrintFile.WriteLine("{0}: {1}", message, _stopwatch.Elapsed);
-			Global.PrintFile.DecrementIndent();
-		}
-	}
+      Global.PrintFile.WriteLine("{0}: {1}", message, _stopwatch.Elapsed);
+      Global.PrintFile.DecrementIndent();
+    }
+  }
 }

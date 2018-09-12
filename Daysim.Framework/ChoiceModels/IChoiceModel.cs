@@ -1,9 +1,8 @@
-﻿using Daysim.Framework.Coefficients;
+﻿using DaySim.Framework.Coefficients;
 
-namespace Daysim.Framework.ChoiceModels {
-	public interface IChoiceModel
-	{
-		void RunInitialize(ICoefficientsReader reader = null);
-		//void Run(IHouseholdWrapper household, ICoefficientsReader reader = null);
-	}
+namespace DaySim.Framework.ChoiceModels {
+  public interface IChoiceModel {
+    void RunInitialize(ICoefficientsReader reader = null);
+    //void Run(IHouseholdWrapper household, ICoefficientsReader reader = null);
+  }
 }

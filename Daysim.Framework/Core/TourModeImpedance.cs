@@ -6,22 +6,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-namespace Daysim.Framework.Core {
-	public sealed class TourModeImpedance : ITourModeImpedance {
-		public int AdjacentMinutesBefore { get; set; }
+namespace DaySim.Framework.Core {
+  public sealed class TourModeImpedance : ITourModeImpedance {
+    public int AdjacentMinutesBefore { get; set; }
 
-		public int MaxMinutesBefore { get; set; }
+    public int MaxMinutesBefore { get; set; }
 
-		public int TotalMinutesBefore { get; set; }
+    public int TotalMinutesBefore { get; set; }
 
-		public int AdjacentMinutesAfter { get; set; }
+    public int AdjacentMinutesAfter { get; set; }
 
-		public int MaxMinutesAfter { get; set; }
+    public int MaxMinutesAfter { get; set; }
 
-		public int TotalMinutesAfter { get; set; }
+    public int TotalMinutesAfter { get; set; }
 
-		public double GeneralizedTimeFromOrigin { get; set; }
+    public double GeneralizedTimeFromOrigin { get; set; }
 
-		public double GeneralizedTimeFromDestination { get; set; }
-	}
+    public double GeneralizedTimeFromDestination { get; set; }
+  }
 }

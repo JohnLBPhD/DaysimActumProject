@@ -6,32 +6,32 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-namespace Daysim.Framework.Core {
-	public sealed class TripModeImpedance : ITripModeImpedance {
-		public TripModeImpedance() {
-			TravelTime = Constants.DEFAULT_VALUE;
-		}
+namespace DaySim.Framework.Core {
+  public sealed class TripModeImpedance : ITripModeImpedance {
+    public TripModeImpedance() {
+      TravelTime = Constants.DEFAULT_VALUE;
+    }
 
-		public int AdjacentMinutesBefore { get; set; }
+    public int AdjacentMinutesBefore { get; set; }
 
-		public int MaxMinutesBefore { get; set; }
+    public int MaxMinutesBefore { get; set; }
 
-		public int TotalMinutesBefore { get; set; }
+    public int TotalMinutesBefore { get; set; }
 
-		public int AdjacentMinutesAfter { get; set; }
+    public int AdjacentMinutesAfter { get; set; }
 
-		public int MaxMinutesAfter { get; set; }
+    public int MaxMinutesAfter { get; set; }
 
-		public int TotalMinutesAfter { get; set; }
+    public int TotalMinutesAfter { get; set; }
 
-		public double TravelTime { get; set; }
+    public double TravelTime { get; set; }
 
-		public double GeneralizedTime { get; set; }
+    public double GeneralizedTime { get; set; }
 
-		public double TravelCost { get; set; }
+    public double TravelCost { get; set; }
 
-		public double TravelDistance { get; set; }
+    public double TravelDistance { get; set; }
 
-		public int PathType { get; set; }
-	}
+    public int PathType { get; set; }
+  }
 }

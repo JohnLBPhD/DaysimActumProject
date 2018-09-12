@@ -8,22 +8,22 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace Daysim.Framework.ChoiceModels {
-	public class ChoiceModelSession {
-		private readonly ConcurrentDictionary<Type, IChoiceModel> _dictionary = new ConcurrentDictionary<Type, IChoiceModel>();
+namespace DaySim.Framework.ChoiceModels {
+  public class ChoiceModelSession {
+    private readonly ConcurrentDictionary<Type, IChoiceModel> _dictionary = new ConcurrentDictionary<Type, IChoiceModel>();
 
-		public TChoiceModel Get<TChoiceModel>() where TChoiceModel : IChoiceModel {
-			var type = typeof (TChoiceModel);
+    public TChoiceModel Get<TChoiceModel>() where TChoiceModel : IChoiceModel {
+      Type type = typeof(TChoiceModel);
 
-			var model = _dictionary.GetOrAdd(type, key => {
-				var m = (IChoiceModel) Activator.CreateInstance(type);
+      IChoiceModel model = _dictionary.GetOrAdd(type, key => {
+        IChoiceModel m = (IChoiceModel)Activator.CreateInstance(type);
 
-				m.RunInitialize();
+        m.RunInitialize();
 
-				return m;
-			});
+        return m;
+      });
 
-			return (TChoiceModel) model;
-		}
-	}
+      return (TChoiceModel)model;
+    }
+  }
 }

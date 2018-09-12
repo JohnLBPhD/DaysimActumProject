@@ -5,18 +5,17 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.Factories;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Actum.Wrappers {
-	[Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Actum)]
-	public class ZoneWrapper : Default.Wrappers.ZoneWrapper, IZoneWrapper {
-		private readonly IZone _zone;
+namespace DaySim.DomainModels.Actum.Wrappers {
+  [Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Actum)]
+  public class ZoneWrapper : Default.Wrappers.ZoneWrapper, IZoneWrapper {
+    private readonly IZone _zone;
 
-		public ZoneWrapper(IZone zone) : base(zone) {
-			_zone = (IZone) zone;
-		}
-	}
+    public ZoneWrapper(IZone zone) : base(zone) {
+      _zone = zone;
+    }
+  }
 }

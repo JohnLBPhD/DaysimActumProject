@@ -5,86 +5,86 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.DomainModels.Default.Models;
-using Daysim.Framework.Core;
-using Daysim.Framework.Factories;
-using Daysim.Framework.Persistence;
+using DaySim.DomainModels.Default.Models;
+using DaySim.Framework.Core;
+using DaySim.Framework.Factories;
+using DaySim.Framework.Persistence;
 using Ninject.Modules;
 
-namespace Daysim.DomainModels.Default {
-	[UsedImplicitly]
-	[Factory(Factory.ModuleFactory, DataType = DataType.Default)]
-	public class ModelModule : NinjectModule {
-		public override void Load() {
-			Bind<Reader<Parcel>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingParcelPath);
+namespace DaySim.DomainModels.Default {
+  [UsedImplicitly]
+  [Factory(Factory.ModuleFactory, DataType = DataType.Default)]
+  public class ModelModule : NinjectModule {
+    public override void Load() {
+      Bind<Reader<Parcel>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingParcelPath);
 
-			Bind<Reader<ParcelNode>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingParcelNodePath);
+      Bind<Reader<ParcelNode>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingParcelNodePath);
 
-			Bind<Reader<ParkAndRideNode>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingParkAndRideNodePath);
+      Bind<Reader<ParkAndRideNode>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingParkAndRideNodePath);
 
-			Bind<Reader<TransitStopArea>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingTransitStopAreaPath);
+      Bind<Reader<TransitStopArea>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingTransitStopAreaPath);
 
-			Bind<Reader<Zone>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingZonePath);
+      Bind<Reader<Zone>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingZonePath);
 
-			Bind<Reader<Household>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingHouseholdPath);
+      Bind<Reader<Household>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingHouseholdPath);
 
-			Bind<Reader<Person>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingPersonPath);
+      Bind<Reader<Person>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingPersonPath);
 
-			Bind<Reader<HouseholdDay>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingHouseholdDayPath);
+      Bind<Reader<HouseholdDay>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingHouseholdDayPath);
 
-			Bind<Reader<PersonDay>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingPersonDayPath);
+      Bind<Reader<PersonDay>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingPersonDayPath);
 
-			Bind<Reader<Tour>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingTourPath);
+      Bind<Reader<Tour>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingTourPath);
 
-			Bind<Reader<Trip>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingTripPath);
+      Bind<Reader<Trip>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingTripPath);
 
-			Bind<Reader<JointTour>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingJointTourPath);
+      Bind<Reader<JointTour>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingJointTourPath);
 
-			Bind<Reader<FullHalfTour>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingFullHalfTourPath);
+      Bind<Reader<FullHalfTour>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingFullHalfTourPath);
 
-			Bind<Reader<PartialHalfTour>>()
-				.ToSelf()
-				.InSingletonScope()
-				.WithConstructorArgument("path", Global.WorkingPartialHalfTourPath);
-		}
-	}
+      Bind<Reader<PartialHalfTour>>()
+          .ToSelf()
+          .InSingletonScope()
+          .WithConstructorArgument("path", Global.WorkingPartialHalfTourPath);
+    }
+  }
 }

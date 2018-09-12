@@ -6,98 +6,96 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.DomainModels.Factories;
-using Daysim.Framework.Core;
-using Daysim.Settings;
+using DaySim.DomainModels.Factories;
+using DaySim.Framework.Core;
+using DaySim.Settings;
 using NDesk.Options;
 using Ninject;
 
-namespace Daysim {
-	public static class Program {
-		private static string _configurationPath;
-		private static string _printFilePath;
-		private static int _start = -1;
-		private static int _end = -1;
-		private static int _index = -1;
-		private static bool _showHelp;
+namespace DaySim {
+  public static class Program {
+    private static string _configurationPath;
+    private static string _printFilePath;
+    private static int _start = -1;
+    private static int _end = -1;
+    private static int _index = -1;
+    private static bool _showHelp;
 
-		private static void Main(string[] args) {
-			try {
-				var options = new OptionSet {
-					{"c|configuration=", "Path to configuration file", v => _configurationPath = v},
-					{"p|printfile=", "Path to print file", v => _printFilePath = v},
-					{"s|start=", "Start index of household range", v => _start = int.Parse(v)},
-					{"e|end=", "End index of household range", v => _end = int.Parse(v)},
-					{"i|index=", "Cluser index", v => _index = int.Parse(v)},
-					{"h|?|help", "Show help and syntax summary", v => _showHelp = v != null}
-				};
+    private static void Main(string[] args) {
+      try {
+        OptionSet options = new OptionSet {
+                    {"c|configuration=", "Path to configuration file", v => _configurationPath = v},
+                    {"p|printfile=", "Path to print file", v => _printFilePath = v},
+                    {"s|start=", "Start index of household range", v => _start = int.Parse(v)},
+                    {"e|end=", "End index of household range", v => _end = int.Parse(v)},
+                    {"i|index=", "Cluser index", v => _index = int.Parse(v)},
+                    {"h|?|help", "Show help and syntax summary", v => _showHelp = v != null}
+                };
 
-				options.Parse(args);
+        options.Parse(args);
 
-				if (_showHelp) {
-					options.WriteOptionDescriptions(Console.Out);
+        if (_showHelp) {
+          options.WriteOptionDescriptions(Console.Out);
 
-					Console.WriteLine();
-					Console.WriteLine("If you do not provide a configuration then the default is to use {0}, in the same directory as the executable.", ConfigurationManager.DEFAULT_CONFIGURATION_NAME);
+          Console.WriteLine();
+          Console.WriteLine("If you do not provide a configuration then the default is to use {0}, in the same directory as the executable.", ConfigurationManager.DEFAULT_CONFIGURATION_NAME);
 
-					Console.WriteLine();
-					Console.WriteLine("If you do not provide a printfile then the default is to create {0}, in the same directory as the executable.", PrintFile.DEFAULT_PRINT_FILE_NAME);
+          Console.WriteLine();
+          Console.WriteLine("If you do not provide a printfile then the default is to create {0}, in the same directory as the executable.", PrintFile.DEFAULT_PRINT_FILE_NAME);
 
-					Console.WriteLine("Please press any key to exit");
-					Console.ReadKey();
+          Console.WriteLine("Please press any key to exit");
+          Console.ReadKey();
 
-					Environment.Exit(0);
-				}
+          Environment.Exit(0);
+        }
 
-				var configurationManager = new ConfigurationManager(_configurationPath);
-				var configuration = configurationManager.Open();
-				var settingsFactory = new SettingsFactory(configuration);
-				var settings = settingsFactory.Create();
-				var printFile = new PrintFile(_printFilePath, configuration);
+        ConfigurationManager configurationManager = new ConfigurationManager(_configurationPath);
+        Configuration configuration = configurationManager.Open();
+        SettingsFactory settingsFactory = new SettingsFactory(configuration);
+        Framework.Factories.ISettings settings = settingsFactory.Create();
+        PrintFile printFile = new PrintFile(_printFilePath, configuration);
 
-				configurationManager.Write(configuration, printFile);
+        configurationManager.Write(configuration, printFile);
 
-				ParallelUtility.Init(configuration);
+        ParallelUtility.Init(configuration);
 
-				Global.Configuration = configuration;
-				Global.Settings = settings;
-				Global.PrintFile = printFile;
-				Global.Kernel = new StandardKernel(new DaysimModule());
+        Global.Configuration = configuration;
+        Global.Settings = settings;
+        Global.PrintFile = printFile;
+        Global.Kernel = new StandardKernel(new DaySimModule());
 
-				var moduleFactory = new ModuleFactory(configuration);
-				var modelModule = moduleFactory.Create();
+        ModuleFactory moduleFactory = new ModuleFactory(configuration);
+        Ninject.Modules.NinjectModule modelModule = moduleFactory.Create();
 
-				Global.Kernel.Load(modelModule);
+        Global.Kernel.Load(modelModule);
 
-				Engine.BeginProgram(_start, _end, _index);
-				//Engine.BeginTestMode();
-			}
-			catch (Exception e) {
-				Console.WriteLine();
-				Console.WriteLine(e.GetBaseException().Message);
+        Engine.BeginProgram(_start, _end, _index);
+        //Engine.BeginTestMode();
+      } catch (Exception e) {
+        Console.WriteLine();
+        Console.WriteLine(e.GetBaseException().Message);
 
-				Console.WriteLine();
-				Console.WriteLine(e.StackTrace);
+        Console.WriteLine();
+        Console.WriteLine(e.StackTrace);
 
-				Console.WriteLine();
-				Console.WriteLine("Please press any key to exit");
+        Console.WriteLine();
+        Console.WriteLine("Please press any key to exit");
 
-				if (Global.PrintFile != null) {
-					Global.PrintFile.WriteLine(e.GetBaseException().Message);
-					Global.PrintFile.WriteLine();
-					Global.PrintFile.WriteLine(e.StackTrace);
-				}
+        if (Global.PrintFile != null) {
+          Global.PrintFile.WriteLine(e.GetBaseException().Message);
+          Global.PrintFile.WriteLine();
+          Global.PrintFile.WriteLine(e.StackTrace);
+        }
 
-				Console.ReadKey();
+        Console.ReadKey();
 
-				Environment.Exit(2);
-			}
-			finally {
-				if (Global.PrintFile != null) {
-					Global.PrintFile.Dispose();
-				}
-			}
-			Environment.Exit(0);
-		}
-	}
+        Environment.Exit(2);
+      } finally {
+        if (Global.PrintFile != null) {
+          Global.PrintFile.Dispose();
+        }
+      }
+      Environment.Exit(0);
+    }
+  }
 }

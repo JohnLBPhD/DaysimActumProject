@@ -5,10 +5,10 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-namespace Daysim.Framework.Core {
-	public static class Constants {
-		public const double EPSILON = 1E-40;
-		public const double HUGE = 1E40;
-		public const int DEFAULT_VALUE = -1;
-	}
+namespace DaySim.Framework.Core {
+  public static class Constants {
+    public const double EPSILON = 1E-40;
+    public const double HUGE = 1E40;
+    public const int DEFAULT_VALUE = -1;
+  }
 }

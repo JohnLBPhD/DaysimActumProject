@@ -5,33 +5,32 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.DomainModels.Actum.Models.Interfaces;
-using Daysim.Framework.DomainModels.Wrappers;
-using System.Collections.Generic;
+using DaySim.DomainModels.Actum.Models.Interfaces;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim.DomainModels.Actum.Wrappers.Interfaces {
-	public interface IActumPersonDayWrapper : IPersonDayWrapper, IActumPersonDay {
+namespace DaySim.DomainModels.Actum.Wrappers.Interfaces {
+  public interface IActumPersonDayWrapper : IPersonDayWrapper, IActumPersonDay {
 
-		#region relations properties
+    #region relations properties
 
-		//IActumHouseholdWrapper Household { get; set; }
+    //IActumHouseholdWrapper Household { get; set; }
 
-		//IActumPersonWrapper Person { get; set; }
+    //IActumPersonWrapper Person { get; set; }
 
-		//IActumHouseholdDayWrapper HouseholdDay { get; set; }
+    //IActumHouseholdDayWrapper HouseholdDay { get; set; }
 
-		//List<IActumTourWrapper> Tours { get; set; }
+    //List<IActumTourWrapper> Tours { get; set; }
 
-		#endregion
-	
-		
-		
-		int CreatedBusinessTours { get; set; }
+    #endregion
 
-		int SimulatedBusinessTours { get; set; }
 
-		int SimulatedBusinessStops { get; set; }
 
-		bool SimulatedBusinessStopsExist();
-	}
+    int CreatedBusinessTours { get; set; }
+
+    int SimulatedBusinessTours { get; set; }
+
+    int SimulatedBusinessStops { get; set; }
+
+    bool SimulatedBusinessStopsExist();
+  }
 }

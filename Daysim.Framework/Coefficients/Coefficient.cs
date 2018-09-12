@@ -6,29 +6,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
-namespace Daysim.Framework.Coefficients {
-	public sealed class Coefficient : ICoefficient {
-		private string _label;
+namespace DaySim.Framework.Coefficients {
+  public sealed class Coefficient : ICoefficient {
+    private string _label;
 
-		public int Parameter { get; set; }
+    public int Parameter { get; set; }
 
-		public string Label {
-			get { return string.IsNullOrEmpty(_label) ? "par_" + Parameter : _label; }
-			set { _label = value; }
-		}
+    public string Label {
+      get => string.IsNullOrEmpty(_label) ? "par_" + Parameter : _label;
+      set => _label = value;
+    }
 
-		public string Constraint { get; set; }
+    public string Constraint { get; set; }
 
-		public double Value { get; set; }
+    public double Value { get; set; }
 
-		public bool IsSizeVariable { get; set; }
+    public bool IsSizeVariable { get; set; }
 
-		public bool IsBaseSizeVariable { get; set; }
+    public bool IsBaseSizeVariable { get; set; }
 
-		public bool IsParFixed { get; set; }
+    public bool IsParFixed { get; set; }
 
-		public bool IsSizeFunctionMultiplier { get; set; }
+    public bool IsSizeFunctionMultiplier { get; set; }
 
-		public bool IsNestCoefficient { get; set; }
-	}
+    public bool IsNestCoefficient { get; set; }
+  }
 }

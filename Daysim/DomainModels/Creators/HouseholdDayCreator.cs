@@ -6,33 +6,33 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Creators;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Creators;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Creators {
-	[UsedImplicitly]
-	[Factory(Factory.WrapperFactory, Category = Category.Creator)]
-	public class HouseholdDayCreator<TWrapper, TModel> : IHouseholdDayCreator where TWrapper : IHouseholdDayWrapper where TModel : IHouseholdDay, new() {
-		IHouseholdDay IHouseholdDayCreator.CreateModel() {
-			return CreateModel();
-		}
+namespace DaySim.DomainModels.Creators {
+  [UsedImplicitly]
+  [Factory(Factory.WrapperFactory, Category = Category.Creator)]
+  public class HouseholdDayCreator<TWrapper, TModel> : IHouseholdDayCreator where TWrapper : IHouseholdDayWrapper where TModel : IHouseholdDay, new() {
+    IHouseholdDay IHouseholdDayCreator.CreateModel() {
+      return CreateModel();
+    }
 
-		private static TModel CreateModel() {
-			return new TModel();
-		}
+    private static TModel CreateModel() {
+      return new TModel();
+    }
 
-		IHouseholdDayWrapper IHouseholdDayCreator.CreateWrapper(IHouseholdDay householdDay, IHouseholdWrapper householdWrapper) {
-			return CreateWrapper(householdDay, householdWrapper);
-		}
+    IHouseholdDayWrapper IHouseholdDayCreator.CreateWrapper(IHouseholdDay householdDay, IHouseholdWrapper householdWrapper) {
+      return CreateWrapper(householdDay, householdWrapper);
+    }
 
-		private static TWrapper CreateWrapper(IHouseholdDay householdDay, IHouseholdWrapper householdWrapper) {
-			var type = typeof (TWrapper);
-			var instance = Activator.CreateInstance(type, householdDay, householdWrapper);
+    private static TWrapper CreateWrapper(IHouseholdDay householdDay, IHouseholdWrapper householdWrapper) {
+      Type type = typeof(TWrapper);
+      object instance = Activator.CreateInstance(type, householdDay, householdWrapper);
 
-			return (TWrapper) instance;
-		}
-	}
+      return (TWrapper)instance;
+    }
+  }
 }

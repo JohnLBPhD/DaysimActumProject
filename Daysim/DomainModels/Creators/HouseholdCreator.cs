@@ -6,33 +6,33 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Creators;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Creators;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Creators {
-	[UsedImplicitly]
-	[Factory(Factory.WrapperFactory, Category = Category.Creator)]
-	public class HouseholdCreator<TWrapper, TModel> : IHouseholdCreator where TWrapper : IHouseholdWrapper where TModel : IHousehold, new() {
-		IHousehold IHouseholdCreator.CreateModel() {
-			return CreateModel();
-		}
+namespace DaySim.DomainModels.Creators {
+  [UsedImplicitly]
+  [Factory(Factory.WrapperFactory, Category = Category.Creator)]
+  public class HouseholdCreator<TWrapper, TModel> : IHouseholdCreator where TWrapper : IHouseholdWrapper where TModel : IHousehold, new() {
+    IHousehold IHouseholdCreator.CreateModel() {
+      return CreateModel();
+    }
 
-		private static TModel CreateModel() {
-			return new TModel();
-		}
+    private static TModel CreateModel() {
+      return new TModel();
+    }
 
-		IHouseholdWrapper IHouseholdCreator.CreateWrapper(IHousehold household) {
-			return CreateWrapper(household);
-		}
+    IHouseholdWrapper IHouseholdCreator.CreateWrapper(IHousehold household) {
+      return CreateWrapper(household);
+    }
 
-		private static TWrapper CreateWrapper(IHousehold household) {
-			var type = typeof (TWrapper);
-			var instance = Activator.CreateInstance(type, household);
+    private static TWrapper CreateWrapper(IHousehold household) {
+      Type type = typeof(TWrapper);
+      object instance = Activator.CreateInstance(type, household);
 
-			return (TWrapper) instance;
-		}
-	}
+      return (TWrapper)instance;
+    }
+  }
 }

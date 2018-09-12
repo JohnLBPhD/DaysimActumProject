@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class RosterEntryNotFoundException : Exception {
-		public RosterEntryNotFoundException() : this("There was not a roster entry that matched the combination of variable, mode, path type, vot group, and minute. Please adjust the roster accordingly.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class RosterEntryNotFoundException : Exception {
+    public RosterEntryNotFoundException() : this("There was not a roster entry that matched the combination of variable, mode, path type, vot group, and minute. Please adjust the roster accordingly.") { }
 
-		public RosterEntryNotFoundException(string message) : base(message) {}
+    public RosterEntryNotFoundException(string message) : base(message) { }
 
-		public RosterEntryNotFoundException(string message, Exception innerException) : base(message, innerException) {}
+    public RosterEntryNotFoundException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected RosterEntryNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected RosterEntryNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

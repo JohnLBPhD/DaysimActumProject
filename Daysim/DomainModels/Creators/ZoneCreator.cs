@@ -6,33 +6,33 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Creators;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Creators;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Creators {
-	[UsedImplicitly]
-	[Factory(Factory.WrapperFactory, Category = Category.Creator)]
-	public class ZoneCreator<TWrapper, TModel> : IZoneCreator where TWrapper : IZoneWrapper where TModel : IZone, new() {
-		IZone IZoneCreator.CreateModel() {
-			return CreateModel();
-		}
+namespace DaySim.DomainModels.Creators {
+  [UsedImplicitly]
+  [Factory(Factory.WrapperFactory, Category = Category.Creator)]
+  public class ZoneCreator<TWrapper, TModel> : IZoneCreator where TWrapper : IZoneWrapper where TModel : IZone, new() {
+    IZone IZoneCreator.CreateModel() {
+      return CreateModel();
+    }
 
-		private static TModel CreateModel() {
-			return new TModel();
-		}
+    private static TModel CreateModel() {
+      return new TModel();
+    }
 
-		IZoneWrapper IZoneCreator.CreateWrapper(IZone zone) {
-			return CreateWrapper(zone);
-		}
+    IZoneWrapper IZoneCreator.CreateWrapper(IZone zone) {
+      return CreateWrapper(zone);
+    }
 
-		private static TWrapper CreateWrapper(IZone zone) {
-			var type = typeof (TWrapper);
-			var instance = Activator.CreateInstance(type, zone);
+    private static TWrapper CreateWrapper(IZone zone) {
+      Type type = typeof(TWrapper);
+      object instance = Activator.CreateInstance(type, zone);
 
-			return (TWrapper) instance;
-		}
-	}
+      return (TWrapper)instance;
+    }
+  }
 }

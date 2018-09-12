@@ -5,34 +5,34 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.Framework.DomainModels.Wrappers {
-	public interface IPartialHalfTourWrapper : IPartialHalfTour {
-		#region relations properties
+namespace DaySim.Framework.DomainModels.Wrappers {
+  public interface IPartialHalfTourWrapper : IPartialHalfTour {
+    #region relations properties
 
-		IHouseholdWrapper Household { get; }
+    IHouseholdWrapper Household { get; }
 
-		IHouseholdDayWrapper HouseholdDay { get; }
+    IHouseholdDayWrapper HouseholdDay { get; }
 
-		#endregion
+    #endregion
 
-		#region flags/choice model/etc. properties
+    #region flags/choice model/etc. properties
 
-		bool Paired { get; set; }
+    bool Paired { get; set; }
 
-		#endregion
+    #endregion
 
-		#region wrapper methods
+    #region wrapper methods
 
-		void SetParticipantTourSequence(ITourWrapper participantTour);
+    void SetParticipantTourSequence(ITourWrapper participantTour);
 
-		#endregion
+    #endregion
 
-		#region init/utility/export methods
+    #region init/utility/export methods
 
-		void Export();
+    void Export();
 
-		#endregion
-	}
+    #endregion
+  }
 }

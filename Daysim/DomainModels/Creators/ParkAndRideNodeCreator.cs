@@ -6,33 +6,33 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Creators;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Creators;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Creators {
-	[UsedImplicitly]
-	[Factory(Factory.WrapperFactory, Category = Category.Creator)]
-	public class ParkAndRideNodeCreator<TWrapper, TModel> : IParkAndRideNodeCreator where TWrapper : IParkAndRideNodeWrapper where TModel : IParkAndRideNode, new() {
-		IParkAndRideNode IParkAndRideNodeCreator.CreateModel() {
-			return CreateModel();
-		}
+namespace DaySim.DomainModels.Creators {
+  [UsedImplicitly]
+  [Factory(Factory.WrapperFactory, Category = Category.Creator)]
+  public class ParkAndRideNodeCreator<TWrapper, TModel> : IParkAndRideNodeCreator where TWrapper : IParkAndRideNodeWrapper where TModel : IParkAndRideNode, new() {
+    IParkAndRideNode IParkAndRideNodeCreator.CreateModel() {
+      return CreateModel();
+    }
 
-		private static TModel CreateModel() {
-			return new TModel();
-		}
+    private static TModel CreateModel() {
+      return new TModel();
+    }
 
-		IParkAndRideNodeWrapper IParkAndRideNodeCreator.CreateWrapper(IParkAndRideNode parkAndRideNode) {
-			return CreateWrapper(parkAndRideNode);
-		}
+    IParkAndRideNodeWrapper IParkAndRideNodeCreator.CreateWrapper(IParkAndRideNode parkAndRideNode) {
+      return CreateWrapper(parkAndRideNode);
+    }
 
-		private static TWrapper CreateWrapper(IParkAndRideNode parkAndRideNode) {
-			var type = typeof (TWrapper);
-			var instance = Activator.CreateInstance(type, parkAndRideNode);
+    private static TWrapper CreateWrapper(IParkAndRideNode parkAndRideNode) {
+      Type type = typeof(TWrapper);
+      object instance = Activator.CreateInstance(type, parkAndRideNode);
 
-			return (TWrapper) instance;
-		}
-	}
+      return (TWrapper)instance;
+    }
+  }
 }

@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class ValueIsNaNException : Exception {
-		public ValueIsNaNException() : this("Value is NaN.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class ValueIsNaNException : Exception {
+    public ValueIsNaNException() : this("Value is NaN.") { }
 
-		public ValueIsNaNException(string message) : base(message) {}
+    public ValueIsNaNException(string message) : base(message) { }
 
-		public ValueIsNaNException(string message, Exception innerException) : base(message, innerException) {}
+    public ValueIsNaNException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected ValueIsNaNException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected ValueIsNaNException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

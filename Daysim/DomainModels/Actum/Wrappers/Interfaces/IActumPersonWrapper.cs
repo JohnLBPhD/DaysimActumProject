@@ -5,23 +5,23 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.DomainModels.Actum.Models.Interfaces;
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.DomainModels.Actum.Models.Interfaces;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim.DomainModels.Actum.Wrappers.Interfaces {
-	public interface IActumPersonWrapper : IPersonWrapper, IActumPerson {
-		bool BikeExists();
+namespace DaySim.DomainModels.Actum.Wrappers.Interfaces {
+  public interface IActumPersonWrapper : IPersonWrapper, IActumPerson {
+    bool BikeExists();
 
-		bool DriversLicenseExists();
+    bool DriversLicenseExists();
 
-		bool CarShareExists();
+    bool CarShareExists();
 
-		bool MCExists();
+    bool MCExists();
 
-		bool MopedExists();
+    bool MopedExists();
 
-		bool WorkParkingExists();
+    bool WorkParkingExists();
 
-		bool SchoolParkingExists();
-	}
+    bool SchoolParkingExists();
+  }
 }

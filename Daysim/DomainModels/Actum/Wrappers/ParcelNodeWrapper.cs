@@ -5,21 +5,19 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.DomainModels.Actum.Models.Interfaces;
-using Daysim.DomainModels.Actum.Wrappers.Interfaces;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.Factories;
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Actum.Wrappers {
-	[Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Actum)]
-	public class ParcelNodeWrapper : Default.Wrappers.ParcelNodeWrapper, IParcelNodeWrapper {
-		private readonly IParcelNode _parcelNode;
+namespace DaySim.DomainModels.Actum.Wrappers {
+  [Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Actum)]
+  public class ParcelNodeWrapper : Default.Wrappers.ParcelNodeWrapper, IParcelNodeWrapper {
+    private readonly IParcelNode _parcelNode;
 
-		[UsedImplicitly]
-		public ParcelNodeWrapper(IParcelNode parcelNode) : base(parcelNode) {
-			_parcelNode = (IParcelNode) parcelNode;
-		}
-	}
+    [UsedImplicitly]
+    public ParcelNodeWrapper(IParcelNode parcelNode) : base(parcelNode) {
+      _parcelNode = parcelNode;
+    }
+  }
 }

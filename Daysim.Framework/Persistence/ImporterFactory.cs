@@ -11,15 +11,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.Framework.Persistence {
+namespace DaySim.Framework.Persistence {
 	public sealed class ImporterFactory {
 		private readonly ModuleBuilder _moduleBuilder;
 
 		public ImporterFactory() {
 			var appDomain = AppDomain.CurrentDomain;
-			var assemblyName = new AssemblyName("Daysim.Dynamic.Importer");
+			var assemblyName = new AssemblyName("DaySim.Dynamic.Importer");
 			var assemblyBuilder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 
 			_moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");

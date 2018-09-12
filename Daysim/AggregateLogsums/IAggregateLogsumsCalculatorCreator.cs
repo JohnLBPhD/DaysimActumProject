@@ -1,7 +1,5 @@
-﻿namespace Daysim.AggregateLogsums
-{
-    public interface IAggregateLogsumsCalculatorCreator
-    {
-        IAggregateLogsumsCalculator Create();
-    }
+﻿namespace DaySim.AggregateLogsums {
+  public interface IAggregateLogsumsCalculatorCreator {
+    IAggregateLogsumsCalculator Create();
+  }
 }

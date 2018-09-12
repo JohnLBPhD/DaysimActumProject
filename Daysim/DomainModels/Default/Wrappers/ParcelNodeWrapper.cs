@@ -5,33 +5,33 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Wrappers;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Default.Wrappers {
-	[Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Default)]
-	public class ParcelNodeWrapper : IParcelNodeWrapper {
-		private readonly IParcelNode _parcelNode;
+namespace DaySim.DomainModels.Default.Wrappers {
+  [Factory(Factory.WrapperFactory, Category = Category.Wrapper, DataType = DataType.Default)]
+  public class ParcelNodeWrapper : IParcelNodeWrapper {
+    private readonly IParcelNode _parcelNode;
 
-		[UsedImplicitly]
-		public ParcelNodeWrapper(IParcelNode parcelNode) {
-			_parcelNode = parcelNode;
-		}
+    [UsedImplicitly]
+    public ParcelNodeWrapper(IParcelNode parcelNode) {
+      _parcelNode = parcelNode;
+    }
 
-		#region domain model properies
+    #region domain model properies
 
-		public int Id {
-			get { return _parcelNode.Id; }
-			set { _parcelNode.Id = value; }
-		}
+    public int Id {
+      get => _parcelNode.Id;
+      set => _parcelNode.Id = value;
+    }
 
-		public int NodeId {
-			get { return _parcelNode.NodeId; }
-			set { _parcelNode.NodeId = value; }
-		}
+    public int NodeId {
+      get => _parcelNode.NodeId;
+      set => _parcelNode.NodeId = value;
+    }
 
-		#endregion
-	}
+    #endregion
+  }
 }

@@ -9,15 +9,15 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Daysim.Framework.Exceptions {
-	[Serializable]
-	public class ErrorReadingSkimFileException : Exception {
-		public ErrorReadingSkimFileException() : this("An error occurred when trying to read the skim file.") {}
+namespace DaySim.Framework.Exceptions {
+  [Serializable]
+  public class ErrorReadingSkimFileException : Exception {
+    public ErrorReadingSkimFileException() : this("An error occurred when trying to read the skim file.") { }
 
-		public ErrorReadingSkimFileException(string message) : base(message) {}
+    public ErrorReadingSkimFileException(string message) : base(message) { }
 
-		public ErrorReadingSkimFileException(string message, Exception innerException) : base(message, innerException) {}
+    public ErrorReadingSkimFileException(string message, Exception innerException) : base(message, innerException) { }
 
-		protected ErrorReadingSkimFileException(SerializationInfo info, StreamingContext context) : base(info, context) {}
-	}
+    protected ErrorReadingSkimFileException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+  }
 }

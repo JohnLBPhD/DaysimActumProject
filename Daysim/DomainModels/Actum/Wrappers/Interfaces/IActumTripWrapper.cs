@@ -5,22 +5,22 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.DomainModels.Actum.Models.Interfaces;
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.DomainModels.Actum.Models.Interfaces;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim.DomainModels.Actum.Wrappers.Interfaces {
-	public interface IActumTripWrapper : ITripWrapper, IActumTrip {
-		bool IsBusinessDestinationPurpose();
+namespace DaySim.DomainModels.Actum.Wrappers.Interfaces {
+  public interface IActumTripWrapper : ITripWrapper, IActumTrip {
+    bool IsBusinessDestinationPurpose();
 
-		bool IsBusinessOriginPurpose();
+    bool IsBusinessOriginPurpose();
 
-		//IActumHouseholdWrapper Household { get; set; }
+    //IActumHouseholdWrapper Household { get; set; }
 
-		//IActumPersonWrapper Person { get; set; }
+    //IActumPersonWrapper Person { get; set; }
 
-		//IActumPersonDayWrapper PersonDay { get; set; }
+    //IActumPersonDayWrapper PersonDay { get; set; }
 
-		IActumTourWrapper Tour { get; set; }
+    IActumTourWrapper Tour { get; set; }
 
-	}
+  }
 }

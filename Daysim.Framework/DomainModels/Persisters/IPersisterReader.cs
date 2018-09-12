@@ -6,16 +6,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System.Collections.Generic;
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.Framework.DomainModels.Persisters {
-	public interface IPersisterReader<out TModel> : IEnumerable<TModel> where TModel : IModel {
-		int Count { get; }
+namespace DaySim.Framework.DomainModels.Persisters {
+  public interface IPersisterReader<out TModel> : IEnumerable<TModel> where TModel : IModel {
+    int Count { get; }
 
-		TModel Seek(int id);
+    TModel Seek(int id);
 
-		IEnumerable<TModel> Seek(int id, string indexName);
+    IEnumerable<TModel> Seek(int id, string indexName);
 
-		void BuildIndex(string indexName, string idName, string parentIdName);
-	}
+    void BuildIndex(string indexName, string idName, string parentIdName);
+  }
 }

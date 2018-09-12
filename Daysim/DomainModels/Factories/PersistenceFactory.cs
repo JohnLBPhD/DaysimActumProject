@@ -6,39 +6,39 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Models;
-using Daysim.Framework.DomainModels.Persisters;
-using Daysim.Framework.Factories;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Persisters;
+using DaySim.Framework.Factories;
 
-namespace Daysim.DomainModels.Factories {
-	public class PersistenceFactory<TModel> : IPersistenceFactory<TModel> where TModel : IModel {
-		private IDisposable _persister;
+namespace DaySim.DomainModels.Factories {
+  public class PersistenceFactory<TModel> : IPersistenceFactory<TModel> where TModel : IModel {
+    private IDisposable _persister;
 
-		public IPersisterReader<TModel> Reader { get; private set; }
+    public IPersisterReader<TModel> Reader { get; private set; }
 
-		public IPersisterImporter Importer { get; private set; }
+    public IPersisterImporter Importer { get; private set; }
 
-		public IPersisterExporter Exporter { get; private set; }
+    public IPersisterExporter Exporter { get; private set; }
 
-		public void Initialize(Configuration configuration) {
-			var helper = new FactoryHelper(configuration);
+    public void Initialize(Configuration configuration) {
+      FactoryHelper helper = new FactoryHelper(configuration);
 
-			var type1 = helper.Persistence.GetModelType<TModel>();
-			var type2 = helper.Persistence.GetPersisterType<TModel>();
+      Type type1 = helper.Persistence.GetModelType<TModel>();
+      Type type2 = helper.Persistence.GetPersisterType<TModel>();
 
-			var args = new[] {type1};
-			var constructed = type2.MakeGenericType(args);
+      Type[] args = new[] { type1 };
+      Type constructed = type2.MakeGenericType(args);
 
-			_persister = (IDisposable) Activator.CreateInstance(constructed);
+      _persister = (IDisposable)Activator.CreateInstance(constructed);
 
-			Reader = (IPersisterReader<TModel>) _persister;
-			Importer = (IPersisterImporter) _persister;
-			Exporter = (IPersisterExporter) _persister;
-		}
+      Reader = (IPersisterReader<TModel>)_persister;
+      Importer = (IPersisterImporter)_persister;
+      Exporter = (IPersisterExporter)_persister;
+    }
 
-		public void Close() {
-			_persister.Dispose();
-		}
-	}
+    public void Close() {
+      _persister.Dispose();
+    }
+  }
 }

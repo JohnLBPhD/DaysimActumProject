@@ -5,78 +5,78 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-namespace Daysim.Framework.DomainModels.Models {
-	public interface IPerson : IModel {
-		int HouseholdId { get; set; }
+namespace DaySim.Framework.DomainModels.Models {
+  public interface IPerson : IModel {
+    int HouseholdId { get; set; }
 
-		int Sequence { get; set; }
+    int Sequence { get; set; }
 
-		int PersonType { get; set; }
+    int PersonType { get; set; }
 
-		int Age { get; set; }
+    int Age { get; set; }
 
-		int Gender { get; set; }
+    int Gender { get; set; }
 
-		int WorkerType { get; set; }
+    int WorkerType { get; set; }
 
-		int UsualWorkParcelId { get; set; }
+    int UsualWorkParcelId { get; set; }
 
-		int UsualWorkZoneKey { get; set; }
+    int UsualWorkZoneKey { get; set; }
 
-		double AutoTimeToUsualWork { get; set; }
+    double AutoTimeToUsualWork { get; set; }
 
-		double AutoDistanceToUsualWork { get; set; }
+    double AutoDistanceToUsualWork { get; set; }
 
-		int StudentType { get; set; }
+    int StudentType { get; set; }
 
-		int UsualSchoolParcelId { get; set; }
+    int UsualSchoolParcelId { get; set; }
 
-		int UsualSchoolZoneKey { get; set; }
+    int UsualSchoolZoneKey { get; set; }
 
-		double AutoTimeToUsualSchool { get; set; }
+    double AutoTimeToUsualSchool { get; set; }
 
-		double AutoDistanceToUsualSchool { get; set; }
+    double AutoDistanceToUsualSchool { get; set; }
 
-		int UsualModeToWork { get; set; }
+    int UsualModeToWork { get; set; }
 
-		int UsualArrivalPeriodToWork { get; set; }
+    int UsualArrivalPeriodToWork { get; set; }
 
-		int UsualDeparturePeriodFromWork { get; set; }
+    int UsualDeparturePeriodFromWork { get; set; }
 
-		int TransitPassOwnership { get; set; }
+    int TransitPassOwnership { get; set; }
 
-		int PaidParkingAtWorkplace { get; set; }
+    int PaidParkingAtWorkplace { get; set; }
 
-		int PaperDiary { get; set; }
+    int PaperDiary { get; set; }
 
-		int ProxyResponse { get; set; }
+    int ProxyResponse { get; set; }
 
-		double ExpansionFactor { get; set; }
+    double ExpansionFactor { get; set; }
 
-		//JLB 20160323
-		int MainOccupation { get; set; }
+    //JLB 20160323
+    int MainOccupation { get; set; }
 
-		int EducationLevel { get; set; }
+    int EducationLevel { get; set; }
 
-		int HasBike { get; set; }
+    int HasBike { get; set; }
 
-		int HasDriversLicense { get; set; }
+    int HasDriversLicense { get; set; }
 
-		int HasCarShare { get; set; }
+    int HasCarShare { get; set; }
 
-		int Income { get; set; }
+    int Income { get; set; }
 
-		int HasMC { get; set; }
+    int HasMC { get; set; }
 
-		int HasMoped { get; set; }
+    int HasMoped { get; set; }
 
-		int HasWorkParking { get; set; }
+    int HasWorkParking { get; set; }
 
-		int WorkHoursPerWeek { get; set; }
+    int WorkHoursPerWeek { get; set; }
 
-		int FlexibleWorkHours { get; set; }
+    int FlexibleWorkHours { get; set; }
 
-		int HasSchoolParking { get; set; }
+    int HasSchoolParking { get; set; }
 
-	}
+  }
 }

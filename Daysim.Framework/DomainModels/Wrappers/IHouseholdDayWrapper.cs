@@ -6,50 +6,50 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System.Collections.Generic;
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.Framework.DomainModels.Wrappers {
-	public interface IHouseholdDayWrapper : IHouseholdDay {
-		#region relations properties
+namespace DaySim.Framework.DomainModels.Wrappers {
+  public interface IHouseholdDayWrapper : IHouseholdDay {
+    #region relations properties
 
-		IHouseholdWrapper Household { get; set; }
+    IHouseholdWrapper Household { get; set; }
 
-		List<IPersonDayWrapper> PersonDays { get; set; }
+    List<IPersonDayWrapper> PersonDays { get; set; }
 
-		List<IJointTourWrapper> JointToursList { get; set; }
+    List<IJointTourWrapper> JointToursList { get; set; }
 
-		List<IFullHalfTourWrapper> FullHalfToursList { get; set; }
+    List<IFullHalfTourWrapper> FullHalfToursList { get; set; }
 
-		List<IPartialHalfTourWrapper> PartialHalfToursList { get; set; }
+    List<IPartialHalfTourWrapper> PartialHalfToursList { get; set; }
 
-		#endregion
+    #endregion
 
-		#region flags/choice model/etc. properties
+    #region flags/choice model/etc. properties
 
-		int AttemptedSimulations { get; set; }
+    int AttemptedSimulations { get; set; }
 
-		bool IsMissingData { get; set; }
+    bool IsMissingData { get; set; }
 
-		bool IsValid { get; set; }
+    bool IsValid { get; set; }
 
-		#endregion
+    #endregion
 
-		#region wrapper methods
+    #region wrapper methods
 
-		IJointTourWrapper CreateJointTour(IHouseholdDayWrapper householdDay, IEnumerable<IPersonDayWrapper> orderedPersonDays, int[] participants, int purpose);
+    IJointTourWrapper CreateJointTour(IHouseholdDayWrapper householdDay, IEnumerable<IPersonDayWrapper> orderedPersonDays, int[] participants, int purpose);
 
-		IFullHalfTourWrapper CreateFullHalfTour(IHouseholdDayWrapper householdDay, IEnumerable<IPersonDayWrapper> orderedPersonDays, int[] participants, int direction);
+    IFullHalfTourWrapper CreateFullHalfTour(IHouseholdDayWrapper householdDay, IEnumerable<IPersonDayWrapper> orderedPersonDays, int[] participants, int direction);
 
-		IPartialHalfTourWrapper CreatePartialHalfTour(IHouseholdDayWrapper householdDay, IEnumerable<IPersonDayWrapper> orderedPersonDays, int[] participants, int[] pickOrder, double[] distanceFromChauffeur, int direction);
+    IPartialHalfTourWrapper CreatePartialHalfTour(IHouseholdDayWrapper householdDay, IEnumerable<IPersonDayWrapper> orderedPersonDays, int[] participants, int[] pickOrder, double[] distanceFromChauffeur, int direction);
 
-		#endregion
+    #endregion
 
-		#region init/utility/export methods
+    #region init/utility/export methods
 
-		void Export();
+    void Export();
 
-		void Reset();
+    void Reset();
 
-		#endregion
-	}
+    #endregion
+  }
 }

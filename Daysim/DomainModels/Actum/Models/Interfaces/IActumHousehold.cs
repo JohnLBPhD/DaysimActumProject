@@ -5,16 +5,16 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-using Daysim.Framework.DomainModels.Models;
+using DaySim.Framework.DomainModels.Models;
 
-namespace Daysim.DomainModels.Actum.Models.Interfaces {
-	public interface IActumHousehold : IHousehold {
-		int MunicipalCode { get; set; }
+namespace DaySim.DomainModels.Actum.Models.Interfaces {
+  public interface IActumHousehold : IHousehold {
+    int MunicipalCode { get; set; }
 
-		double StationDistance { get; set; }
+    double StationDistance { get; set; }
 
-		int ParkingAvailability { get; set; }
+    int ParkingAvailability { get; set; }
 
-		int InternetPaymentMethod { get; set; }
-	}
+    int InternetPaymentMethod { get; set; }
+  }
 }

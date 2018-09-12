@@ -8,58 +8,54 @@
 
 using System;
 using System.IO;
-using Daysim.DomainModels;
-using Daysim.DomainModels.Default;
-using Daysim.DomainModels.Default.Models;
-using Daysim.DomainModels.Default.Wrappers;
-using Daysim.Framework.Core;
-using Daysim.Framework.DomainModels.Wrappers;
+using DaySim.Framework.Core;
+using DaySim.Framework.DomainModels.Wrappers;
 
-namespace Daysim.ShadowPricing {
-	public sealed class ShadowPriceWriter : IDisposable {
-		private readonly StreamWriter _writer;
+namespace DaySim.ShadowPricing {
+  public sealed class ShadowPriceWriter : IDisposable {
+    private readonly StreamWriter _writer;
 
-		public ShadowPriceWriter(FileInfo file) {
-			if (file == null) {
-				throw new ArgumentNullException("file");
-			}
+    public ShadowPriceWriter(FileInfo file) {
+      if (file == null) {
+        throw new ArgumentNullException("file");
+      }
 
-			_writer = new StreamWriter(file.Open(FileMode.Create, FileAccess.Write, FileShare.Read));
+      _writer = new StreamWriter(file.Open(FileMode.Create, FileAccess.Write, FileShare.Read));
 
-			_writer.Write("PARCELID" + Global.Configuration.ShadowPriceDelimiter);
-			_writer.Write("DELTSPUW" + Global.Configuration.ShadowPriceDelimiter);
-			_writer.Write("SHADPEMP" + Global.Configuration.ShadowPriceDelimiter);
-			_writer.Write("DELTSPUS" + Global.Configuration.ShadowPriceDelimiter);
-			_writer.Write("SHADPK12" + Global.Configuration.ShadowPriceDelimiter);
-			_writer.Write("DELTSPUU" + Global.Configuration.ShadowPriceDelimiter);
-			_writer.Write("SHADPUNI");
-			_writer.WriteLine();
-		}
+      _writer.Write("PARCELID" + Global.Configuration.ShadowPriceDelimiter);
+      _writer.Write("DELTSPUW" + Global.Configuration.ShadowPriceDelimiter);
+      _writer.Write("SHADPEMP" + Global.Configuration.ShadowPriceDelimiter);
+      _writer.Write("DELTSPUS" + Global.Configuration.ShadowPriceDelimiter);
+      _writer.Write("SHADPK12" + Global.Configuration.ShadowPriceDelimiter);
+      _writer.Write("DELTSPUU" + Global.Configuration.ShadowPriceDelimiter);
+      _writer.Write("SHADPUNI");
+      _writer.WriteLine();
+    }
 
-		public void Dispose() {
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+    public void Dispose() {
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
 
-		private void Dispose(bool disposing) {
-			if (disposing) {
-				_writer.Dispose();
-			}
-		}
+    private void Dispose(bool disposing) {
+      if (disposing) {
+        _writer.Dispose();
+      }
+    }
 
-		public void Write(IParcelWrapper parcel) {
-			if (parcel == null) {
-				throw new ArgumentNullException("parcel");
-			}
+    public void Write(IParcelWrapper parcel) {
+      if (parcel == null) {
+        throw new ArgumentNullException("parcel");
+      }
 
-			_writer.Write(string.Format("{0}{1}", parcel.Id, Global.Configuration.ShadowPriceDelimiter));
-			_writer.Write(string.Format("{0:0.000000}{1}", parcel.EmploymentDifference, Global.Configuration.ShadowPriceDelimiter));
-			_writer.Write(string.Format("{0:0.000000}{1}", parcel.ShadowPriceForEmployment, Global.Configuration.ShadowPriceDelimiter));
-			_writer.Write(string.Format("{0:0.000000}{1}", parcel.StudentsK12Difference, Global.Configuration.ShadowPriceDelimiter));
-			_writer.Write(string.Format("{0:0.000000}{1}", parcel.ShadowPriceForStudentsK12, Global.Configuration.ShadowPriceDelimiter));
-			_writer.Write(string.Format("{0:0.000000}{1}", parcel.StudentsUniversityDifference, Global.Configuration.ShadowPriceDelimiter));
-			_writer.Write(string.Format("{0:0.000000}", parcel.ShadowPriceForStudentsUniversity));
-			_writer.WriteLine();
-		}
-	}
+      _writer.Write(string.Format("{0}{1}", parcel.Id, Global.Configuration.ShadowPriceDelimiter));
+      _writer.Write(string.Format("{0:0.000000}{1}", parcel.EmploymentDifference, Global.Configuration.ShadowPriceDelimiter));
+      _writer.Write(string.Format("{0:0.000000}{1}", parcel.ShadowPriceForEmployment, Global.Configuration.ShadowPriceDelimiter));
+      _writer.Write(string.Format("{0:0.000000}{1}", parcel.StudentsK12Difference, Global.Configuration.ShadowPriceDelimiter));
+      _writer.Write(string.Format("{0:0.000000}{1}", parcel.ShadowPriceForStudentsK12, Global.Configuration.ShadowPriceDelimiter));
+      _writer.Write(string.Format("{0:0.000000}{1}", parcel.StudentsUniversityDifference, Global.Configuration.ShadowPriceDelimiter));
+      _writer.Write(string.Format("{0:0.000000}", parcel.ShadowPriceForStudentsUniversity));
+      _writer.WriteLine();
+    }
+  }
 }

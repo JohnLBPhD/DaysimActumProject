@@ -5,23 +5,23 @@
 // distributed under a License for its use is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-namespace Daysim.Framework.DomainModels.Models {
-	public interface IZone : IModel {
-		int Key { get; set; }
+namespace DaySim.Framework.DomainModels.Models {
+  public interface IZone : IModel {
+    int Key { get; set; }
 
-		bool DestinationEligible { get; set; }
+    bool DestinationEligible { get; set; }
 
-		int External { get; set; }
+    int External { get; set; }
 
-		int XCoordinate { get; set; }
+    int XCoordinate { get; set; }
 
-		int YCoordinate { get; set; }
-	
-		double FractionWorkersWithJobsOutsideRegion { get; set; }
+    int YCoordinate { get; set; }
 
-		double FractionJobsFilledByWorkersFromOutsideRegion { get; set; }
+    double FractionWorkersWithJobsOutsideRegion { get; set; }
 
-		int NearestStopAreaId { get; set; }
+    double FractionJobsFilledByWorkersFromOutsideRegion { get; set; }
 
-	}
+    int NearestStopAreaId { get; set; }
+
+  }
 }
