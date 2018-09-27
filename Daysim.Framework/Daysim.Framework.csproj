@@ -113,7 +113,7 @@
     <Compile Include="Coefficients\Coefficient.cs" />
     <Compile Include="Coefficients\CoefficientsReader.cs" />
     <Compile Include="Core\Configuration.cs" />
-    <Compile Include="Core\ConfigurationManager.cs" />
+    <Compile Include="Core\ConfigurationManagerRSG.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\IMinuteSpan.cs" />
     <Compile Include="Core\ITimeWindow.cs" />

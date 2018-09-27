@@ -6,13 +6,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 
 namespace DaySim.Framework.Core {
   public class PrintFile : IDisposable {
     private readonly Configuration _configuration;
-    public const string DEFAULT_PRINT_FILE_NAME = "last-run.log";
+    public static readonly string DEFAULT_PRINT_FILENAME = "run_" + DateTime.Now.ToString("yyyy-MM-dd_HH'h'mm'm'", CultureInfo.InvariantCulture) + "_ACTUM.log";
     private readonly StreamWriter _writer;
     private int _indent;
 
@@ -25,8 +26,8 @@ namespace DaySim.Framework.Core {
 
         path =
             directoryName == null
-                ? DEFAULT_PRINT_FILE_NAME
-                : Path.Combine(directoryName, DEFAULT_PRINT_FILE_NAME);
+                ? DEFAULT_PRINT_FILENAME
+                : Path.Combine(directoryName, DEFAULT_PRINT_FILENAME);
       }
 
       FileInfo file = new FileInfo(path);

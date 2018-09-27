@@ -1490,6 +1490,10 @@ namespace DaySim.Framework.Core {
     [XmlAttribute]
     public double PaidRideShare_PathImpedance_Gamma_Cost { get; set; }
 
+    public enum NodeDistanceReaderTypes { TextOrBinary, HDF5 };
+
+    [XmlAttribute]
+    public NodeDistanceReaderTypes NodeDistanceReaderType { get; set; } = NodeDistanceReaderTypes.TextOrBinary;
 
   }
 }

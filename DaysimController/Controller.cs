@@ -17,291 +17,290 @@ using DaySim.Framework.Core;
 using Timer = DaySim.Framework.Core.Timer;
 
 namespace DaySimController {
-	public static class Controller {
-		private static readonly List<Tuple<Process, RemoteMachine, Timer>> _processes = new List<Tuple<Process, RemoteMachine, Timer>>();
-		private static readonly List<Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer>> _instances = new List<Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer>>();
-		private static double _householdCount;
+  public static class Controller {
+    private static readonly List<Tuple<Process, RemoteMachine, Timer>> _processes = new List<Tuple<Process, RemoteMachine, Timer>>();
+    private static readonly List<Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer>> _instances = new List<Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer>>();
+    private static double _householdCount;
 
-		public static void BeginProgram() {
-			var timer = new Timer("Starting DaySim Controller...");
+    public static void BeginProgram() {
+      Timer timer = new Timer("Starting DaySim Controller...");
 
-			Engine.BeginInitialize();
-			Engine.BeginRunRawConversion();
-			Engine.BeginImportData();
-			Engine.BeginBuildIndexes();
+      Engine.BeginInitialize();
+      Engine.BeginRunRawConversion();
+      Engine.BeginImportData();
+      Engine.BeginBuildIndexes();
 
-			BeginRunRemoteProcesses();
-			BeginMerge();
-			BeginLoadData();
+      BeginRunRemoteProcesses();
+      BeginMerge();
+      BeginLoadData();
 
-			Engine.BeginUpdateShadowPricing();
+      Engine.BeginUpdateShadowPricing();
 
-			BeginCopyFilesToRemoteMachines();
+      BeginCopyFilesToRemoteMachines();
 
-			timer.Stop("Total running time");
-		}
+      timer.Stop("Total running time");
+    }
 
-		private static void BeginRunRemoteProcesses() {
-			var timer = new Timer("Running remote processes...");
+    private static void BeginRunRemoteProcesses() {
+      Timer timer = new Timer("Running remote processes...");
 
-			RunRemoteProcesses();
+      RunRemoteProcesses();
 
-			timer.Stop();
-		}
+      timer.Stop();
+    }
 
-		private static void RunRemoteProcesses() {
-			using (var reader = new StreamReader(new FileInfo(Global.GetInputPath(Global.Configuration.RawHouseholdPath)).OpenRead())) {
-				while (reader.ReadLine() != null) {
-					_householdCount++;
-				}
-			}
+    private static void RunRemoteProcesses() {
+      using (StreamReader reader = new StreamReader(new FileInfo(Global.GetInputPath(Global.Configuration.RawHouseholdPath)).OpenRead())) {
+        while (reader.ReadLine() != null) {
+          _householdCount++;
+        }
+      }
 
-			_householdCount--;
+      _householdCount--;
 
-			var machines = RemoteMachine.GetAll();
-			var range = (int) Math.Ceiling(_householdCount / machines.Count);
+      List<RemoteMachine> machines = RemoteMachine.GetAll();
+      int range = (int)Math.Ceiling(_householdCount / machines.Count);
 
-			for (var i = 0; i < machines.Count; i++) {
-				var start = (range * i);
-				var end = (int) Math.Min((range * i) + range - 1, _householdCount - 1);
+      for (int i = 0; i < machines.Count; i++) {
+        int start = (range * i);
+        int end = (int)Math.Min((range * i) + range - 1, _householdCount - 1);
 
-				var machine = machines[i];
+        RemoteMachine machine = machines[i];
 
-				if (Environment.MachineName.Equals(machine.Name, StringComparison.OrdinalIgnoreCase)) {
-					var process = new Process {
-						StartInfo = {
-							UseShellExecute = false,
-							CreateNoWindow = true,
-							FileName = machine.Filename,
-							Arguments = machine.Arguments + " /s=" + start + " /e=" + end + " /i=" + i
-						}
-					};
+        if (Environment.MachineName.Equals(machine.Name, StringComparison.OrdinalIgnoreCase)) {
+          Process process = new Process {
+            StartInfo = {
+                            UseShellExecute = false,
+                            CreateNoWindow = true,
+                            FileName = machine.Filename,
+                            Arguments = machine.Arguments + " /s=" + start + " /e=" + end + " /i=" + i
+                        }
+          };
 
-					process.Start();
+          process.Start();
 
-					_processes.Add(Tuple.Create(process, machine, new Timer()));
-				}
-				else {
-					var connectionOptions = new ConnectionOptions {Username = Global.Configuration.RemoteUsername, Password = Global.Configuration.RemotePassword};
-					var managementScope = new ManagementScope(String.Format(@"\\{0}\ROOT\CIMV2", machine.Name), connectionOptions);
+          _processes.Add(Tuple.Create(process, machine, new Timer()));
+        } else {
+          ConnectionOptions connectionOptions = new ConnectionOptions { Username = Global.Configuration.RemoteUsername, Password = Global.Configuration.RemotePassword };
+          ManagementScope managementScope = new ManagementScope(string.Format(@"\\{0}\ROOT\CIMV2", machine.Name), connectionOptions);
 
-					managementScope.Connect();
+          managementScope.Connect();
 
-					var processClass = new ManagementClass(managementScope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
-					var inParameters = processClass.GetMethodParameters("Create");
+          ManagementClass processClass = new ManagementClass(managementScope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
+          ManagementBaseObject inParameters = processClass.GetMethodParameters("Create");
 
-					inParameters["CurrentDirectory"] = machine.CurrentDirectory;
-					inParameters["CommandLine"] = machine.CommandLine + " /s=" + start + " /e=" + end + " /i=" + i;
+          inParameters["CurrentDirectory"] = machine.CurrentDirectory;
+          inParameters["CommandLine"] = machine.CommandLine + " /s=" + start + " /e=" + end + " /i=" + i;
 
-					var outParameters = processClass.InvokeMethod("Create", inParameters, null);
+          ManagementBaseObject outParameters = processClass.InvokeMethod("Create", inParameters, null);
 
-					if ((uint) outParameters.Properties["ReturnValue"].Value == 0) {
-						_instances.Add(Tuple.Create(managementScope, outParameters, machine, new Timer()));
-					}
-				}
-			}
+          if ((uint)outParameters.Properties["ReturnValue"].Value == 0) {
+            _instances.Add(Tuple.Create(managementScope, outParameters, machine, new Timer()));
+          }
+        }
+      }
 
-			var threads = new List<Thread>();
+      List<Thread> threads = new List<Thread>();
 
-			foreach (var process in _processes) {
-				var start = new ParameterizedThreadStart(BeginLocalWatch);
-				var thread = new Thread(start);
+      foreach (Tuple<Process, RemoteMachine, Timer> process in _processes) {
+        ParameterizedThreadStart start = new ParameterizedThreadStart(BeginLocalWatch);
+        Thread thread = new Thread(start);
 
-				thread.Start(process);
-				threads.Add(thread);
-			}
+        thread.Start(process);
+        threads.Add(thread);
+      }
 
-			foreach (var instance in _instances) {
-				var start = new ParameterizedThreadStart(BeginRemoteWatch);
-				var thread = new Thread(start);
+      foreach (Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer> instance in _instances) {
+        ParameterizedThreadStart start = new ParameterizedThreadStart(BeginRemoteWatch);
+        Thread thread = new Thread(start);
 
-				thread.Start(instance);
-				threads.Add(thread);
-			}
+        thread.Start(instance);
+        threads.Add(thread);
+      }
 
-			foreach (var thread in threads) {
-				thread.Join();
-			}
-		}
+      foreach (Thread thread in threads) {
+        thread.Join();
+      }
+    }
 
-		private static void BeginLocalWatch(object obj) {
-			var process = (Tuple<Process, RemoteMachine, Timer>) obj;
+    private static void BeginLocalWatch(object obj) {
+      Tuple<Process, RemoteMachine, Timer> process = (Tuple<Process, RemoteMachine, Timer>)obj;
 
-			Console.WriteLine(process.Item2.Name + ": " + process.Item1.StartInfo.FileName);
+      Console.WriteLine(process.Item2.Name + ": " + process.Item1.StartInfo.FileName);
 
-			LocalWatch(process);
+      LocalWatch(process);
 
-			process.Item3.Stop(process.Item2.Name + ": " + "Running time");
-		}
+      process.Item3.Stop(process.Item2.Name + ": " + "Running time");
+    }
 
-		private static void LocalWatch(Tuple<Process, RemoteMachine, Timer> process) {
-			process.Item1.WaitForExit();
-		}
+    private static void LocalWatch(Tuple<Process, RemoteMachine, Timer> process) {
+      process.Item1.WaitForExit();
+    }
 
-		private static void BeginRemoteWatch(object obj) {
-			var instance = (Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer>) obj;
+    private static void BeginRemoteWatch(object obj) {
+      Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer> instance = (Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer>)obj;
 
-			Console.WriteLine(instance.Item3.Name + ": " + instance.Item3.CommandLine);
+      Console.WriteLine(instance.Item3.Name + ": " + instance.Item3.CommandLine);
 
-			RemoteWatch(instance);
+      RemoteWatch(instance);
 
-			instance.Item4.Stop(instance.Item3.Name + ": " + "Running time");
-		}
+      instance.Item4.Stop(instance.Item3.Name + ": " + "Running time");
+    }
 
-		private static void RemoteWatch(Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer> instance) {
-			var eventQuery = new WqlEventQuery("Select * From __InstanceDeletionEvent Within 1 Where TargetInstance ISA 'Win32_Process' AND TargetInstance.ProcessID = '" + instance.Item2["processId"] + "'");
-			var watcher = new ManagementEventWatcher(instance.Item1, eventQuery);
+    private static void RemoteWatch(Tuple<ManagementScope, ManagementBaseObject, RemoteMachine, Timer> instance) {
+      WqlEventQuery eventQuery = new WqlEventQuery("Select * From __InstanceDeletionEvent Within 1 Where TargetInstance ISA 'Win32_Process' AND TargetInstance.ProcessID = '" + instance.Item2["processId"] + "'");
+      ManagementEventWatcher watcher = new ManagementEventWatcher(instance.Item1, eventQuery);
 
-			var stopped = false;
+      bool stopped = false;
 
-			while (!stopped) {
-				var o = watcher.WaitForNextEvent();
+      while (!stopped) {
+        ManagementBaseObject o = watcher.WaitForNextEvent();
 
-				if (((ManagementBaseObject) o["TargetInstance"])["ProcessID"].ToString() == instance.Item2["processId"].ToString()) {
-					stopped = true;
-				}
-			}
+        if (((ManagementBaseObject)o["TargetInstance"])["ProcessID"].ToString() == instance.Item2["processId"].ToString()) {
+          stopped = true;
+        }
+      }
 
-			watcher.Stop();
-		}
+      watcher.Stop();
+    }
 
-		private static void BeginMerge() {
-			var timer = new Timer("Merging...");
+    private static void BeginMerge() {
+      Timer timer = new Timer("Merging...");
 
-			Merge();
+      Merge();
 
-			timer.Stop();
-		}
+      timer.Stop();
+    }
 
-		private static void Merge() {
-			var householdHeader = false;
-			var personHeader = false;
-			var householdDayHeader = false;
-			var jointTourHeader = false;
-			var fullHalfTourHeader = false;
-			var partialHalfTourHeader = false;
-			var personDayHeader = false;
-			var tourHeader = false;
-			var tripHeader = false;
-			var tdmTripListHeader = false;
+    private static void Merge() {
+      bool householdHeader = false;
+      bool personHeader = false;
+      bool householdDayHeader = false;
+      bool jointTourHeader = false;
+      bool fullHalfTourHeader = false;
+      bool partialHalfTourHeader = false;
+      bool personDayHeader = false;
+      bool tourHeader = false;
+      bool tripHeader = false;
+      bool tdmTripListHeader = false;
 
-			var machines = RemoteMachine.GetAll();
-			
-			for (var i = 0; i < machines.Count; i++) {
-				var machine = machines[i];
-				var configurationManager = new ConfigurationManager(machine.ConfigurationPath.ToUncPath(machine.Name));
-				var configuration = configurationManager.Open();
+      List<RemoteMachine> machines = RemoteMachine.GetAll();
 
-				var household = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputHouseholdPath));
-				AppendFile(household, new FileInfo(Global.GetOutputPath(configuration.OutputHouseholdPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref householdHeader);
+      for (int i = 0; i < machines.Count; i++) {
+        RemoteMachine machine = machines[i];
+        ConfigurationManagerRSG configurationManager = new ConfigurationManagerRSG(machine.ConfigurationPath.ToUncPath(machine.Name));
+        Configuration configuration = configurationManager.Open();
 
-				var person = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputPersonPath));
-				AppendFile(person, new FileInfo(Global.GetOutputPath(configuration.OutputPersonPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref personHeader);
+        FileInfo household = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputHouseholdPath));
+        AppendFile(household, new FileInfo(Global.GetOutputPath(configuration.OutputHouseholdPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref householdHeader);
 
-				var householdDay = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputHouseholdDayPath));
-				AppendFile(householdDay, new FileInfo(Global.GetOutputPath(configuration.OutputHouseholdDayPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref householdDayHeader);
+        FileInfo person = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputPersonPath));
+        AppendFile(person, new FileInfo(Global.GetOutputPath(configuration.OutputPersonPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref personHeader);
 
-				if (!string.IsNullOrEmpty(configuration.OutputJointTourPath)) {
-					var jointTour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputJointTourPath));
-					AppendFile(jointTour, new FileInfo(Global.GetOutputPath(configuration.OutputJointTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref jointTourHeader);
-				}
+        FileInfo householdDay = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputHouseholdDayPath));
+        AppendFile(householdDay, new FileInfo(Global.GetOutputPath(configuration.OutputHouseholdDayPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref householdDayHeader);
 
-				if (!string.IsNullOrEmpty(configuration.OutputFullHalfTourPath)) {
-					var fullHalfTour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputFullHalfTourPath));
-					AppendFile(fullHalfTour, new FileInfo(Global.GetOutputPath(configuration.OutputFullHalfTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref fullHalfTourHeader);
-				}
+        if (!string.IsNullOrEmpty(configuration.OutputJointTourPath)) {
+          FileInfo jointTour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputJointTourPath));
+          AppendFile(jointTour, new FileInfo(Global.GetOutputPath(configuration.OutputJointTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref jointTourHeader);
+        }
 
-				if (!string.IsNullOrEmpty(configuration.OutputPartialHalfTourPath)) {
-					var partialHalfTour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputPartialHalfTourPath));
-					AppendFile(partialHalfTour, new FileInfo(Global.GetOutputPath(configuration.OutputPartialHalfTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref partialHalfTourHeader);
-				}
+        if (!string.IsNullOrEmpty(configuration.OutputFullHalfTourPath)) {
+          FileInfo fullHalfTour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputFullHalfTourPath));
+          AppendFile(fullHalfTour, new FileInfo(Global.GetOutputPath(configuration.OutputFullHalfTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref fullHalfTourHeader);
+        }
 
-				var personDay = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputPersonDayPath));
-				AppendFile(personDay, new FileInfo(Global.GetOutputPath(configuration.OutputPersonDayPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref personDayHeader);
+        if (!string.IsNullOrEmpty(configuration.OutputPartialHalfTourPath)) {
+          FileInfo partialHalfTour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputPartialHalfTourPath));
+          AppendFile(partialHalfTour, new FileInfo(Global.GetOutputPath(configuration.OutputPartialHalfTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref partialHalfTourHeader);
+        }
 
-				var tour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputTourPath));
-				AppendFile(tour, new FileInfo(Global.GetOutputPath(configuration.OutputTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref tourHeader);
+        FileInfo personDay = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputPersonDayPath));
+        AppendFile(personDay, new FileInfo(Global.GetOutputPath(configuration.OutputPersonDayPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref personDayHeader);
 
-				var trip = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputTripPath));
-				AppendFile(trip, new FileInfo(Global.GetOutputPath(configuration.OutputTripPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref tripHeader);
+        FileInfo tour = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputTourPath));
+        AppendFile(tour, new FileInfo(Global.GetOutputPath(configuration.OutputTourPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref tourHeader);
 
-				var tdmTripList = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputTDMTripListPath));
-				AppendFile(tdmTripList, new FileInfo(Global.GetOutputPath(configuration.OutputTDMTripListPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref tdmTripListHeader);
-			}
-		}
+        FileInfo trip = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputTripPath));
+        AppendFile(trip, new FileInfo(Global.GetOutputPath(configuration.OutputTripPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref tripHeader);
 
-		private static void BeginLoadData() {
-			var timer = new Timer("Loading data...");
+        FileInfo tdmTripList = new FileInfo(Global.GetOutputPath(Global.Configuration.OutputTDMTripListPath));
+        AppendFile(tdmTripList, new FileInfo(Global.GetOutputPath(configuration.OutputTDMTripListPath).ToUncPath(machine.Name).ToIndexedPath(i)), ref tdmTripListHeader);
+      }
+    }
 
-			LoadData();
+    private static void BeginLoadData() {
+      Timer timer = new Timer("Loading data...");
 
-			timer.Stop();
-		}
+      LoadData();
 
-		private static void LoadData() {
-			ChoiceModelFactory.LoadData();
-		}
+      timer.Stop();
+    }
 
-		private static void BeginCopyFilesToRemoteMachines() {
-			var timer = new Timer("Copying files to remote machines...");
+    private static void LoadData() {
+      ChoiceModelFactory.LoadData();
+    }
 
-			CopyFilesToRemoteMachines();
+    private static void BeginCopyFilesToRemoteMachines() {
+      Timer timer = new Timer("Copying files to remote machines...");
 
-			timer.Stop();
-		}
+      CopyFilesToRemoteMachines();
 
-		private static void CopyFilesToRemoteMachines() {
-			var shadowPricesFile = new FileInfo(Global.ShadowPricesPath);
-			var parkAndRideShadowPricesFile = new FileInfo(Global.ParkAndRideShadowPricesPath);
-			var machines = RemoteMachine.GetAll();
+      timer.Stop();
+    }
 
-			foreach (var machine in machines) {
-				if (shadowPricesFile.Exists) {
-					shadowPricesFile.CopyTo(Global.GetWorkingPath("shadow_prices.txt").ToUncPath(machine.Name), true);
-				}
+    private static void CopyFilesToRemoteMachines() {
+      FileInfo shadowPricesFile = new FileInfo(Global.ShadowPricesPath);
+      FileInfo parkAndRideShadowPricesFile = new FileInfo(Global.ParkAndRideShadowPricesPath);
+      List<RemoteMachine> machines = RemoteMachine.GetAll();
 
-				if (parkAndRideShadowPricesFile.Exists) {
-					parkAndRideShadowPricesFile.CopyTo(Global.GetWorkingPath("park_and_ride_shadow_prices.txt").ToUncPath(machine.Name), true);
-				}
-			}
-		}
+      foreach (RemoteMachine machine in machines) {
+        if (shadowPricesFile.Exists) {
+          shadowPricesFile.CopyTo(Global.GetWorkingPath("shadow_prices.txt").ToUncPath(machine.Name), true);
+        }
 
-		private static void AppendFile(FileInfo local, FileInfo remote, ref bool appendHeader) {
-			if (!remote.Exists) {
-				return;
-			}
+        if (parkAndRideShadowPricesFile.Exists) {
+          parkAndRideShadowPricesFile.CopyTo(Global.GetWorkingPath("park_and_ride_shadow_prices.txt").ToUncPath(machine.Name), true);
+        }
+      }
+    }
 
-			var fileMode =
-				appendHeader
-					? FileMode.Open
-					: FileMode.Create;
+    private static void AppendFile(FileInfo local, FileInfo remote, ref bool appendHeader) {
+      if (!remote.Exists) {
+        return;
+      }
 
-			using (var reader = new StreamReader(remote.OpenRead())) {
-				using (var stream = local.Open(fileMode, FileAccess.Write, FileShare.Read)) {
-					stream.Seek(0, SeekOrigin.End);
+      FileMode fileMode =
+                appendHeader
+                    ? FileMode.Open
+                    : FileMode.Create;
 
-					using (var writer = new StreamWriter(stream)) {
-						var firstLine = true;
-						string line;
+      using (StreamReader reader = new StreamReader(remote.OpenRead())) {
+        using (FileStream stream = local.Open(fileMode, FileAccess.Write, FileShare.Read)) {
+          stream.Seek(0, SeekOrigin.End);
 
-						while ((line = reader.ReadLine()) != null) {
-							if (firstLine) {
-								if (!appendHeader) {
-									writer.WriteLine(line);
+          using (StreamWriter writer = new StreamWriter(stream)) {
+            bool firstLine = true;
+            string line;
 
-									appendHeader = true;
-								}
+            while ((line = reader.ReadLine()) != null) {
+              if (firstLine) {
+                if (!appendHeader) {
+                  writer.WriteLine(line);
 
-								firstLine = false;
+                  appendHeader = true;
+                }
 
-								continue;
-							}
+                firstLine = false;
 
-							writer.WriteLine(line);
-						}
-					}
-				}
-			}
-		}
-	}
+                continue;
+              }
+
+              writer.WriteLine(line);
+            }
+          }
+        }
+      }
+    }
+  }
 }
