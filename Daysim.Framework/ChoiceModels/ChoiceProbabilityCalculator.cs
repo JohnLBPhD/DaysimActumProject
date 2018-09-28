@@ -1,4 +1,4 @@
-﻿// Copyright 2005-2008 Mark A. Bradley and John L. Bowman
+// Copyright 2005-2008 Mark A. Bradley and John L. Bowman
 // Copyright 2011-2013 John Bowman, Mark Bradley, and RSG, Inc.
 // You may not possess or use this file without a License for its use.
 // Unless required by applicable law or agreed to in writing, software
@@ -893,6 +893,9 @@ namespace DaySim.Framework.ChoiceModels {
       }
 
       public void Update(int key, bool available, bool isChosenAlternative) {
+        if (Global.TraceResults && true) {
+          Global.PrintFile.WriteLine("Alternative {0}.Update(key={1}, available={2}, isChosenAlternative={3}", this, key, available, isChosenAlternative);
+        }
         Key = key;
         Size = 0;
         Nest = null;
@@ -916,6 +919,10 @@ namespace DaySim.Framework.ChoiceModels {
       }
 
       public void AddUtilityTerm(int parameter, double value) {
+        if (Global.TraceResults && true) {
+          Global.PrintFile.WriteLine("Alternative {0}.AddUtilityTerm(parameter={1},value={2}", this, parameter, value);
+        }
+
         if (double.IsNaN(value)) {
           throw new ValueIsNaNException(string.Format(@"Value is NaN for alternative {0}, parameter {1}.", _index, parameter));
         }
@@ -962,6 +969,9 @@ namespace DaySim.Framework.ChoiceModels {
       }
 
       public void AddUtilityComponent(Component component) {
+        if (Global.TraceResults && true) {
+          Global.PrintFile.WriteLine("Alternative {0}.AddUtilityComponent(component={1}", this, component);
+        }
         if (_choiceProbabilityCalculator._modelIsInEstimationMode) {
           AltUtilityComponents.Add(component);
         } else {
@@ -970,6 +980,9 @@ namespace DaySim.Framework.ChoiceModels {
       }
 
       public void AddSizeComponent(Component component) {
+        if (Global.TraceResults && true) {
+          Global.PrintFile.WriteLine("Alternative {0}.AddSizeComponent(component={1}", this, component);
+        }
         if (_choiceProbabilityCalculator._modelIsInEstimationMode) {
           AltSizeComponents.Add(component);
         } else {
@@ -1107,6 +1120,10 @@ namespace DaySim.Framework.ChoiceModels {
       }
 
       public void AddUtilityTerm(int parameter, double value) {
+        if (Global.TraceResults && true) {
+          Global.PrintFile.WriteLine("Component {0}.AddUtilityTerm(parameter={1}, value={2}", this, parameter, value);
+        }
+
         if (double.IsNaN(value)) {
           throw new ValueIsNaNException(string.Format(@"Value is NaN for component {0}, parameter {1}.", _index, parameter));
         }
