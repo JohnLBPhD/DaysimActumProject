@@ -4,61 +4,60 @@ using System.IO;
 using CaliperMTX;
 
 namespace DaySim.Framework.Roster {
-	public class TranscadFileSkimReader : ISkimFileReader {
-		private string _path;
-		private Dictionary<int, int> _mapping;
-		private string _file;
+  public class TranscadFileSkimReader : ISkimFileReader {
+    private readonly string _path;
+    private Dictionary<int, int> _mapping;
+    private string _file;
 
-		private UInt16[][] _matrix = null;
+    private ushort[][] _matrix = null;
 
-		public TranscadFileSkimReader(string path, Dictionary<int, int> mapping) {
-			_path = path;
-			_mapping = mapping;
-		}
+    public TranscadFileSkimReader(string path, Dictionary<int, int> mapping) {
+      _path = path;
+      _mapping = mapping;
+    }
 
-		public SkimMatrix Read(string filename, int field, float scale) {
-			_file = Path.Combine(_path, filename);
-			Console.WriteLine("Loading skim file: {0}", _file);
+    public SkimMatrix Read(string filename, int field, float scale) {
+      _file = Path.Combine(_path, filename);
+      Console.WriteLine("Loading skim file: {0}", _file);
 
-			GetTranscadMatrix(_file, field, scale);
-			return new SkimMatrix(_matrix);
-		}
+      GetTranscadMatrix(_file, field, scale);
+      return new SkimMatrix(_matrix);
+    }
 
-		private void GetTranscadMatrix(string matrixPath, int matrixNumber, float scale) {
-			var m = new Matrix(matrixPath);
-			matrixNumber -= 1;
-			m.SetCore((short) matrixNumber);
-			var nrows = m.GetBaseNRows();
-			var ncols = m.GetBaseNCols();
-			var mrow = new float[ncols];
+    private void GetTranscadMatrix(string matrixPath, int matrixNumber, float scale) {
+      Matrix m = new Matrix(matrixPath);
+      matrixNumber -= 1;
+      m.SetCore((short)matrixNumber);
+      int nrows = m.GetBaseNRows();
+      int ncols = m.GetBaseNCols();
+      float[] mrow = new float[ncols];
 
-			int count = _mapping.Count;
+      int count = _mapping.Count;
 
-			_matrix = new ushort[count][];
-			for (int i = 0; i < count; i++) {
-				_matrix[i] = new ushort[count];
-			}
+      _matrix = new ushort[count][];
+      for (int i = 0; i < count; i++) {
+        _matrix[i] = new ushort[count];
+      }
 
-			for (var row = 0; row < nrows; row++) {
-				m.GetBaseVector(MATRIX_DIM.MATRIX_ROW, row, mrow);
+      for (int row = 0; row < nrows; row++) {
+        m.GetBaseVector(MATRIX_DIM.MATRIX_ROW, row, mrow);
 
-				for (var col = 0; col < ncols; col++) {
-					var value = mrow[col];
+        for (int col = 0; col < ncols; col++) {
+          float value = mrow[col];
 
-					if (_mapping.ContainsKey(row+1) && _mapping.ContainsKey(col+1)) {
-						if (value > short.MaxValue / scale) {
-							value = (short) (short.MaxValue / scale);
-						}
-						else if (value < 0) {
-							value = 0;
-						}
+          if (_mapping.ContainsKey(row + 1) && _mapping.ContainsKey(col + 1)) {
+            if (value > short.MaxValue / scale) {
+              value = (short)(short.MaxValue / scale);
+            } else if (value < 0) {
+              value = 0;
+            }
 
-						value = Convert.ToUInt16(value * scale);
+            value = Convert.ToUInt16(value * scale);
 
-						_matrix[_mapping[row+1]][_mapping[col+1]] = (ushort) value;
-					}
-				}
-			}
-		}
-	}
+            _matrix[_mapping[row + 1]][_mapping[col + 1]] = (ushort)value;
+          }
+        }
+      }
+    }
+  }
 }

@@ -13,168 +13,160 @@ using System.Runtime.InteropServices;
 using DaySim.Framework.Core;
 
 namespace DaySim.Framework.Persistence {
-	public class Reader<TModel> : IEnumerator<TModel>, IEnumerable<TModel> where TModel : class {
-		private readonly Dictionary<int, long> _index;
-		private readonly Dictionary<string, Dictionary<int, int[]>> _indexes = new Dictionary<string, Dictionary<int, int[]>>();
+  public class Reader<TModel> : IEnumerator<TModel>, IEnumerable<TModel> where TModel : class {
+    private readonly Dictionary<int, long> _index;
+    private readonly Dictionary<string, Dictionary<int, int[]>> _indexes = new Dictionary<string, Dictionary<int, int[]>>();
 
-		private readonly int _size;
-		private byte[] _buffer;
-		private readonly FileStream _stream;
-		private readonly int _count;
+    private readonly int _size;
+    private byte[] _buffer;
+    private readonly FileStream _stream;
+    private readonly int _count;
 
-		private Dictionary<int, long>.ValueCollection.Enumerator _enumerator;
-		private long _position;
-		private TModel _model;
+    private Dictionary<int, long>.ValueCollection.Enumerator _enumerator;
+    private long _position;
+    private TModel _model;
 
-		public Reader(string path) {
-			var file = new FileInfo(path);
+    public Reader(string path) {
+      FileInfo file = new FileInfo(path);
 
-			_size = Marshal.SizeOf(typeof (TModel));
-			_buffer = new byte[_size];
-			_stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
-			_count = (int) file.Length / _size;
+      _size = Marshal.SizeOf(typeof(TModel));
+      _buffer = new byte[_size];
+      _stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+      _count = (int)file.Length / _size;
 
-			_index = new Dictionary<int, long>(_count);
+      _index = new Dictionary<int, long>(_count);
 
-			var ifile = ModelUtility.GetIndexFile(path);
-			var isize = Marshal.SizeOf(typeof (Element));
-			var ibuffer = new byte[isize];
+      FileInfo ifile = ModelUtility.GetIndexFile(path);
+      int isize = Marshal.SizeOf(typeof(Element));
+      byte[] ibuffer = new byte[isize];
 
-			using (var istream = ifile.Open(FileMode.Open, FileAccess.Read, FileShare.Read)) {
-				while (istream.Read(ibuffer, 0, isize) != 0) {
-					var element = ModelUtility.PtrToStructure<Element>(ref ibuffer);
+      using (FileStream istream = ifile.Open(FileMode.Open, FileAccess.Read, FileShare.Read)) {
+        while (istream.Read(ibuffer, 0, isize) != 0) {
+          Element element = ModelUtility.PtrToStructure<Element>(ref ibuffer);
 
-					_index.Add(element.Id, element.Position);
-				}
-			}
-		}
+          _index.Add(element.Id, element.Position);
+        }
+      }
+    }
 
-		public int Count {
-			get { return _count; }
-		}
+    public int Count => _count;
 
-		public TModel Seek(int id) {
-			lock (typeof (TModel)) {
-				long location;
+    public TModel Seek(int id) {
+      lock (typeof(TModel)) {
 
-				return !_index.TryGetValue(id, out location) ? null : Seek(location);
-			}
-		}
+        return !_index.TryGetValue(id, out long location) ? null : Seek(location);
+      }
+    }
 
-		private TModel Seek(long location) {
-			var offset = location - _position;
+    private TModel Seek(long location) {
+      long offset = location - _position;
 
-			if (offset != 0) {
-				_stream.Seek(offset, SeekOrigin.Current);
-			}
+      if (offset != 0) {
+        _stream.Seek(offset, SeekOrigin.Current);
+      }
 
-			_position = location + _size;
+      _position = location + _size;
 
-			_stream.Read(_buffer, 0, _size);
+      _stream.Read(_buffer, 0, _size);
 
-			_model = ModelUtility.PtrToStructure<TModel>(ref _buffer);
+      _model = ModelUtility.PtrToStructure<TModel>(ref _buffer);
 
-			return _model;
-		}
+      return _model;
+    }
 
-		public virtual void Dispose() {
-			Dispose(false);
-		}
+    public virtual void Dispose() {
+      Dispose(false);
+    }
 
-		protected virtual void Dispose(bool disposing) {
-			if (disposing) {
-				_stream.Dispose();
-			}
-		}
+    protected virtual void Dispose(bool disposing) {
+      if (disposing) {
+        _stream.Dispose();
+      }
+    }
 
-		~Reader() {
-			Dispose(true);
-		}
+    ~Reader() {
+      Dispose(true);
+    }
 
-		public bool MoveNext() {
-			if (!_enumerator.MoveNext()) {
-				return false;
-			}
+    public bool MoveNext() {
+      if (!_enumerator.MoveNext()) {
+        return false;
+      }
 
-			Seek(_enumerator.Current);
+      Seek(_enumerator.Current);
 
-			return true;
-		}
+      return true;
+    }
 
-		public void Reset() {
-			_enumerator = _index.Values.GetEnumerator();
-			_position = 0;
-			_stream.Position = 0;
-			_model = null;
-		}
+    public void Reset() {
+      _enumerator = _index.Values.GetEnumerator();
+      _position = 0;
+      _stream.Position = 0;
+      _model = null;
+    }
 
-		public TModel Current {
-			get { return _model; }
-		}
+    public TModel Current => _model;
 
-		object IEnumerator.Current {
-			get { return Current; }
-		}
+    object IEnumerator.Current => Current;
 
-		public virtual IEnumerator<TModel> GetEnumerator() {
-			Reset();
+    public virtual IEnumerator<TModel> GetEnumerator() {
+      Reset();
 
-			return this;
-		}
+      return this;
+    }
 
-		IEnumerator IEnumerable.GetEnumerator() {
-			return GetEnumerator();
-		}
+    IEnumerator IEnumerable.GetEnumerator() {
+      return GetEnumerator();
+    }
 
-		public void BuildIndex(string indexName, string idName, string parentIdName) {
-			var type = typeof (TModel);
-			var idProperty = type.GetProperty(idName);
-			var parentIdProperty = type.GetProperty(parentIdName);
-			var parentIds = new HashSet<int>();
-			var keys = new Dictionary<int, int>(Count);
+    public void BuildIndex(string indexName, string idName, string parentIdName) {
+      System.Type type = typeof(TModel);
+      System.Reflection.PropertyInfo idProperty = type.GetProperty(idName);
+      System.Reflection.PropertyInfo parentIdProperty = type.GetProperty(parentIdName);
+      HashSet<int> parentIds = new HashSet<int>();
+      Dictionary<int, int> keys = new Dictionary<int, int>(Count);
 
-			foreach (var model in this) {
-				var id = (int) idProperty.GetValue(model, null);
-				var parentId = (int) parentIdProperty.GetValue(model, null);
+      foreach (TModel model in this) {
+        int id = (int)idProperty.GetValue(model, null);
+        int parentId = (int)parentIdProperty.GetValue(model, null);
 
-				parentIds.Add(parentId);
-				keys.Add(id, parentId);
-			}
+        parentIds.Add(parentId);
+        keys.Add(id, parentId);
+      }
 
-			keys = keys.OrderBy(entry => entry.Value).ToDictionary(entry => entry.Key, entry => entry.Value);
+      keys = keys.OrderBy(entry => entry.Value).ToDictionary(entry => entry.Key, entry => entry.Value);
 
-			var index = new Dictionary<int, int[]>(parentIds.Count);
-			var enumerator = keys.GetEnumerator();
+      Dictionary<int, int[]> index = new Dictionary<int, int[]>(parentIds.Count);
+      Dictionary<int, int>.Enumerator enumerator = keys.GetEnumerator();
 
-			enumerator.MoveNext();
+      enumerator.MoveNext();
 
-			foreach (var parentId in parentIds.OrderBy(parentId => parentId)) {
-				var ids = new List<int>();
+      foreach (int parentId in parentIds.OrderBy(parentId => parentId)) {
+        List<int> ids = new List<int>();
 
-				while (enumerator.Current.Value == parentId) {
-					ids.Add(enumerator.Current.Key);
+        while (enumerator.Current.Value == parentId) {
+          ids.Add(enumerator.Current.Key);
 
-					enumerator.MoveNext();
-				}
+          enumerator.MoveNext();
+        }
 
-				index.Add(parentId, ids.ToArray());
-			}
+        index.Add(parentId, ids.ToArray());
+      }
 
-			_indexes.Add(indexName, index);
+      _indexes.Add(indexName, index);
 
-			if (Global.PrintFile != null) {
-				Global.PrintFile.WriteLine(@"Building index {0} on {1} for foreign key {2}.", indexName, type.Name, parentIdName);
-			}
-		}
+      if (Global.PrintFile != null) {
+        Global.PrintFile.WriteLine(@"Building index {0} on {1} for foreign key {2}.", indexName, type.Name, parentIdName);
+      }
+    }
 
-		public IList<TModel> Seek(int parentId, string indexName) {
-			lock (typeof (TModel)) {
-				var index = _indexes[indexName];
+    public IList<TModel> Seek(int parentId, string indexName) {
+      lock (typeof(TModel)) {
+        Dictionary<int, int[]> index = _indexes[indexName];
 
-				int[] elements;
 
-				return index.TryGetValue(parentId, out elements) ? elements.Select(Seek).ToList() : new List<TModel>();
-			}
-		}
-	}
+        return index.TryGetValue(parentId, out int[] elements) ? elements.Select(Seek).ToList() : new List<TModel>();
+      }
+    }
+  }
 }
