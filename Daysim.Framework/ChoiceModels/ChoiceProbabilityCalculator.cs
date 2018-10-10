@@ -63,7 +63,7 @@ namespace DaySim.Framework.ChoiceModels {
         throw new FileNotFoundException("The coefficient file was not found.");
       }
       _instanceId = _instance++;
-      int[] interesting = { 71, 72, 40 };
+      int[] interesting = { };
       bool isInteresting = interesting.Contains(_instanceId);
       intenseDebugging = isInteresting;
 
