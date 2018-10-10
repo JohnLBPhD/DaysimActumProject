@@ -646,7 +646,7 @@ namespace DaySim.Framework.ChoiceModels {
       //				}
       //				catch (Exception e) {
       //					bool testbreak = true;
-      //					throw new HouseholdModelException();
+      //					throw new Framework.Exceptions.HouseholdModelException();
       //				}
     }
 

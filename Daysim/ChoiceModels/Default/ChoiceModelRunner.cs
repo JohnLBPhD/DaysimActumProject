@@ -6,6 +6,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 
+using System;
 using System.Linq;
 using DaySim.ChoiceModels.Default.Models;
 using DaySim.Framework.ChoiceModels;
@@ -56,15 +57,14 @@ namespace DaySim.ChoiceModels.Default {
       }
 
 #if RELEASE
-			try {
+      try {
 #endif
-      ChoiceModelFactory.TotalTimesHouseholdModelSuiteRun[batchNumber]++;
-      RunHouseholdModelSuite(_household, batchNumber);
+        ChoiceModelFactory.TotalTimesHouseholdModelSuiteRun[batchNumber]++;
+        RunHouseholdModelSuite(_household, batchNumber);
 #if RELEASE
-			}
-			catch (Exception e) {
-				throw new HouseholdModelException(string.Format("Error running household models for {0}.", _household), e);
-			}
+      } catch (Exception e) {
+        throw new Framework.Exceptions.HouseholdModelException(string.Format("Error running household models for {0}.", _household), e);
+      }
 #endif
     }
 
@@ -75,15 +75,14 @@ namespace DaySim.ChoiceModels.Default {
 
       foreach (IPersonWrapper person in _household.Persons) {
 #if RELEASE
-				try {
+        try {
 #endif
-        ChoiceModelFactory.TotalTimesPersonModelSuiteRun[batchNumber]++;
-        RunPersonModelSuite(person, batchNumber);
+          ChoiceModelFactory.TotalTimesPersonModelSuiteRun[batchNumber]++;
+          RunPersonModelSuite(person, batchNumber);
 #if RELEASE
-				}
-				catch (Exception e) {
-					throw new PersonModelException(string.Format("Error running person models for {0}.", person), e);
-				}
+        } catch (Exception e) {
+          throw new Framework.Exceptions.PersonModelException(string.Format("Error running person models for {0}.", person), e);
+        }
 #endif
       }
     }
@@ -95,54 +94,53 @@ namespace DaySim.ChoiceModels.Default {
 
       foreach (IPersonDayWrapper personDay in _household.HouseholdDays.SelectMany(householdDay => householdDay.PersonDays)) {
 #if RELEASE
-				try {
+        try {
 #endif
 
-        ChoiceModelFactory.TotalPersonDays[batchNumber]++;
-        bool simulatedAnInvalidPersonDay = false;
+          ChoiceModelFactory.TotalPersonDays[batchNumber]++;
+          bool simulatedAnInvalidPersonDay = false;
 
-        while (!personDay.IsValid && (!Global.Configuration.IsInEstimationMode || !simulatedAnInvalidPersonDay)) { //don't retry household in estimation mode) {
+          while (!personDay.IsValid && (!Global.Configuration.IsInEstimationMode || !simulatedAnInvalidPersonDay)) { //don't retry household in estimation mode) {
 
-          if (Global.Configuration.InvalidAttemptsBeforeContinue > 0 && personDay.AttemptedSimulations > Global.Configuration.InvalidAttemptsBeforeContinue) {
-            Global.PrintFile.WriteLine("***** Person day for household {0} person {1} in zone {2} invalid after {3} attempts", personDay.HouseholdId, personDay.Person.Sequence, personDay.Household.ResidenceZoneKey, personDay.AttemptedSimulations);
-            return false;
-            //break;
-          } else {
-            personDay.IsValid = true;
-          }
-
-          ChoiceModelFactory.TotalTimesPersonDayModelSuiteRun[batchNumber]++;
-          RunPersonDayModelSuite(personDay, batchNumber);
-          RunTourModels(personDay, batchNumber);
-
-          // exits the loop if the person's day is valid
-          if (personDay.IsValid) {
-            // after updating park and ride lot loads
-            if (!Global.Configuration.IsInEstimationMode && personDay.Tours != null) {
-              foreach (ITourWrapper tour in personDay.Tours.Where(tour => tour.Mode == Global.Settings.Modes.ParkAndRide)) {
-                tour.SetParkAndRideStay();
-              }
+            if (Global.Configuration.InvalidAttemptsBeforeContinue > 0 && personDay.AttemptedSimulations > Global.Configuration.InvalidAttemptsBeforeContinue) {
+              Global.PrintFile.WriteLine("***** Person day for household {0} person {1} in zone {2} invalid after {3} attempts", personDay.HouseholdId, personDay.Person.Sequence, personDay.Household.ResidenceZoneKey, personDay.AttemptedSimulations);
+              return false;
+              //break;
+            } else {
+              personDay.IsValid = true;
             }
 
-            break;
+            ChoiceModelFactory.TotalTimesPersonDayModelSuiteRun[batchNumber]++;
+            RunPersonDayModelSuite(personDay, batchNumber);
+            RunTourModels(personDay, batchNumber);
+
+            // exits the loop if the person's day is valid
+            if (personDay.IsValid) {
+              // after updating park and ride lot loads
+              if (!Global.Configuration.IsInEstimationMode && personDay.Tours != null) {
+                foreach (ITourWrapper tour in personDay.Tours.Where(tour => tour.Mode == Global.Settings.Modes.ParkAndRide)) {
+                  tour.SetParkAndRideStay();
+                }
+              }
+
+              break;
+            }
+
+            personDay.AttemptedSimulations++;
+
+            if (!simulatedAnInvalidPersonDay) {
+              simulatedAnInvalidPersonDay = true;
+
+              // counts unique instances where a person's day is invalid
+              ChoiceModelFactory.TotalInvalidAttempts[batchNumber]++;
+            }
+
+            personDay.Reset();
           }
-
-          personDay.AttemptedSimulations++;
-
-          if (!simulatedAnInvalidPersonDay) {
-            simulatedAnInvalidPersonDay = true;
-
-            // counts unique instances where a person's day is invalid
-            ChoiceModelFactory.TotalInvalidAttempts[batchNumber]++;
-          }
-
-          personDay.Reset();
-        }
 #if RELEASE
-				}
-				catch (Exception e) {
-					throw new PersonDayModelException(string.Format("Error running person-day models for {0}.", personDay), e);
-				}
+        } catch (Exception e) {
+          throw new Framework.Exceptions.PersonDayModelException(string.Format("Error running person-day models for {0}.", personDay), e);
+        }
 #endif
       }
       return true;
@@ -159,37 +157,36 @@ namespace DaySim.ChoiceModels.Default {
 
       foreach (ITourWrapper tour in personDay.Tours) {
 #if RELEASE
-				try {
+        try {
 #endif
-        ChoiceModelFactory.TotalTimesTourModelSuiteRun[batchNumber]++;
-        RunTourModelSuite(tour, batchNumber);
+          ChoiceModelFactory.TotalTimesTourModelSuiteRun[batchNumber]++;
+          RunTourModelSuite(tour, batchNumber);
 
-        if (!personDay.IsValid) {
-          if (Global.Configuration.IsInEstimationMode && Global.Configuration.EstimationModel == "IntermediateStopLocationModel") {
-            Global.PrintFile.WriteEstimationRecordExclusionMessage("ChoiceModelRunner", "RunTourModels", tour.Household.Id, tour.Person.Sequence, -1, tour.Sequence, -1, -1, tour.HalfTour1Trips + tour.HalfTour2Trips);
+          if (!personDay.IsValid) {
+            if (Global.Configuration.IsInEstimationMode && Global.Configuration.EstimationModel == "IntermediateStopLocationModel") {
+              Global.PrintFile.WriteEstimationRecordExclusionMessage("ChoiceModelRunner", "RunTourModels", tour.Household.Id, tour.Person.Sequence, -1, tour.Sequence, -1, -1, tour.HalfTour1Trips + tour.HalfTour2Trips);
+            }
+
+            return;
           }
 
-          return;
-        }
+          ChoiceModelFactory.TotalTimesTourTripModelsRun[batchNumber]++;
+          RunTourTripModels(tour, batchNumber);
 
-        ChoiceModelFactory.TotalTimesTourTripModelsRun[batchNumber]++;
-        RunTourTripModels(tour, batchNumber);
+          if (!personDay.IsValid) {
+            return;
+          }
 
-        if (!personDay.IsValid) {
-          return;
-        }
+          ChoiceModelFactory.TotalTimesTourSubtourModelsRun[batchNumber]++;
+          RunSubtourModels(tour, batchNumber);
 
-        ChoiceModelFactory.TotalTimesTourSubtourModelsRun[batchNumber]++;
-        RunSubtourModels(tour, batchNumber);
-
-        if (!personDay.IsValid) {
-          return;
-        }
+          if (!personDay.IsValid) {
+            return;
+          }
 #if RELEASE
-				}
-				catch (Exception e) {
-					throw new TourModelException(string.Format("Error running tour models for {0}.", tour), e);
-				}
+        } catch (Exception e) {
+          throw new Framework.Exceptions.TourModelException(string.Format("Error running tour models for {0}.", tour), e);
+        }
 #endif
       }
     }
@@ -216,26 +213,25 @@ namespace DaySim.ChoiceModels.Default {
 
       foreach (ITourWrapper subtour in tour.Subtours) {
 #if RELEASE
-				try {
+        try {
 #endif
-        ChoiceModelFactory.TotalTimesTourSubtourModelSuiteRun[batchNumber]++;
-        RunSubtourModelSuite(subtour, batchNumber);
+          ChoiceModelFactory.TotalTimesTourSubtourModelSuiteRun[batchNumber]++;
+          RunSubtourModelSuite(subtour, batchNumber);
 
-        if (!tour.PersonDay.IsValid) {
-          return;
-        }
+          if (!tour.PersonDay.IsValid) {
+            return;
+          }
 
-        ChoiceModelFactory.TotalTimesSubtourTripModelsRun[batchNumber]++;
-        RunSubtourTripModels(subtour, batchNumber);
+          ChoiceModelFactory.TotalTimesSubtourTripModelsRun[batchNumber]++;
+          RunSubtourTripModels(subtour, batchNumber);
 
-        if (!tour.PersonDay.IsValid) {
-          return;
-        }
+          if (!tour.PersonDay.IsValid) {
+            return;
+          }
 #if RELEASE
-				}
-				catch (Exception e) {
-					throw new SubtourModelException(string.Format("Error running subtour models for {0}.", subtour), e);
-				}
+        } catch (Exception e) {
+          throw new Framework.Exceptions.SubtourModelException(string.Format("Error running subtour models for {0}.", subtour), e);
+        }
 #endif
       }
     }
@@ -654,31 +650,30 @@ namespace DaySim.ChoiceModels.Default {
           ITripWrapper trip = halfTour.Trips[i];
 
 #if RELEASE
-					try {
+          try {
 #endif
-          halfTour.SimulatedTrips++;
+            halfTour.SimulatedTrips++;
 
-          if (trip.IsHalfTourFromOrigin) {
-            tour.HalfTour1Trips++;
-          } else {
-            tour.HalfTour2Trips++;
-          }
+            if (trip.IsHalfTourFromOrigin) {
+              tour.HalfTour1Trips++;
+            } else {
+              tour.HalfTour2Trips++;
+            }
 
-          ChoiceModelFactory.TotalTimesTripModelSuiteRun[batchNumber]++;
-          //Global.PrintFile.WriteLine("Before - trip {0} sequence {1} orig parcel {2} orig zone {3}", trip.Id, trip.Sequence, trip.OriginParcelId, trip.OriginZoneKey); 
-          //Global.PrintFile.WriteLine("Before - trip {0} sequence {1} dest parcel {2} dest zone {3}", trip.Id, trip.Sequence, trip.DestinationParcelId, trip.DestinationZoneKey); 
-          RunTripModelSuite(tour, halfTour, trip, batchNumber);
-          //Global.PrintFile.WriteLine("*After - trip {0} sequence {1} orig parcel {2} orig zone {3}", trip.Id, trip.Sequence, trip.OriginParcelId, trip.OriginZoneKey); 
-          //Global.PrintFile.WriteLine("*After - trip {0} sequence {1} dest parcel {2} dest zone {3}", trip.Id, trip.Sequence, trip.DestinationParcelId, trip.DestinationZoneKey); 
+            ChoiceModelFactory.TotalTimesTripModelSuiteRun[batchNumber]++;
+            //Global.PrintFile.WriteLine("Before - trip {0} sequence {1} orig parcel {2} orig zone {3}", trip.Id, trip.Sequence, trip.OriginParcelId, trip.OriginZoneKey); 
+            //Global.PrintFile.WriteLine("Before - trip {0} sequence {1} dest parcel {2} dest zone {3}", trip.Id, trip.Sequence, trip.DestinationParcelId, trip.DestinationZoneKey); 
+            RunTripModelSuite(tour, halfTour, trip, batchNumber);
+            //Global.PrintFile.WriteLine("*After - trip {0} sequence {1} orig parcel {2} orig zone {3}", trip.Id, trip.Sequence, trip.OriginParcelId, trip.OriginZoneKey); 
+            //Global.PrintFile.WriteLine("*After - trip {0} sequence {1} dest parcel {2} dest zone {3}", trip.Id, trip.Sequence, trip.DestinationParcelId, trip.DestinationZoneKey); 
 
-          if (!trip.PersonDay.IsValid) {
-            return;
-          }
+            if (!trip.PersonDay.IsValid) {
+              return;
+            }
 #if RELEASE
-					}
-					catch (Exception e) {
-						throw new TripModelException(string.Format("Error running trip models for {0}.", trip), e);
-					}
+          } catch (Exception e) {
+            throw new Framework.Exceptions.TripModelException(string.Format("Error running trip models for {0}.", trip), e);
+          }
 #endif
         }
       }

@@ -1342,19 +1342,18 @@ namespace DaySim {
               //var index = 0;
               if ((household.Id % Global.Configuration.HouseholdSamplingRateOneInX == (Global.Configuration.HouseholdSamplingStartWithY - 1))) {
 #if RELEASE
-					try {
+                try {
 #endif
-                if (_start == -1 || _end == -1 || _index == -1 || index++.IsBetween(_start, _end)) {
-                  int randomSeed = randoms[household.Id];
-                  IChoiceModelRunner choiceModelRunner = ChoiceModelFactory.Get(household, randomSeed);
+                  if (_start == -1 || _end == -1 || _index == -1 || index++.IsBetween(_start, _end)) {
+                    int randomSeed = randoms[household.Id];
+                    IChoiceModelRunner choiceModelRunner = ChoiceModelFactory.Get(household, randomSeed);
 
-                  choiceModelRunner.RunChoiceModels(batchNumber);
-                }
+                    choiceModelRunner.RunChoiceModels(batchNumber);
+                  }
 #if RELEASE
-					}
-					catch (Exception e) {
-						throw new ChoiceModelRunnerException(string.Format("An error occurred in ChoiceModelRunner for household {0}.", household.Id), e);
-					}
+                } catch (Exception e) {
+                  throw new Framework.Exceptions.ChoiceModelRunnerException(string.Format("An error occurred in ChoiceModelRunner for household {0}.", household.Id), e);
+                }
 #endif
               }
 
