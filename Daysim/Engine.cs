@@ -305,6 +305,7 @@ namespace DaySim {
       Global.Kernel.Get<SkimFileReaderFactory>().Register("hdf5", new HDF5ReaderCreator());
       Global.Kernel.Get<SkimFileReaderFactory>().Register("cube", new CubeReaderCreator());
       Global.Kernel.Get<SkimFileReaderFactory>().Register("transcad", new TranscadReaderCreator());
+      Global.Kernel.Get<SkimFileReaderFactory>().Register("omx", new OMXReaderCreator());
     }
 
     private static void InitializeSamplingFactories() {
@@ -1344,12 +1345,12 @@ namespace DaySim {
 #if RELEASE
                 try {
 #endif
-                  if (_start == -1 || _end == -1 || _index == -1 || index++.IsBetween(_start, _end)) {
-                    int randomSeed = randoms[household.Id];
-                    IChoiceModelRunner choiceModelRunner = ChoiceModelFactory.Get(household, randomSeed);
+                if (_start == -1 || _end == -1 || _index == -1 || index++.IsBetween(_start, _end)) {
+                  int randomSeed = randoms[household.Id];
+                  IChoiceModelRunner choiceModelRunner = ChoiceModelFactory.Get(household, randomSeed);
 
-                    choiceModelRunner.RunChoiceModels(batchNumber);
-                  }
+                  choiceModelRunner.RunChoiceModels(batchNumber);
+                }
 #if RELEASE
                 } catch (Exception e) {
                   throw new Framework.Exceptions.ChoiceModelRunnerException(string.Format("An error occurred in ChoiceModelRunner for household {0}.", household.Id), e);
